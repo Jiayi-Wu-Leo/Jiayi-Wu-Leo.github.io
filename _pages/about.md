@@ -34,7 +34,7 @@ Welcome to my academic homepage. I am Jiayi Wu, a Ph.D. student supervised by [P
 <!-- - AI-based Surgical Navigation: Make AI have the ability to generate structured diagnostic reports through medical images, and combine NLP algorithms and computer vision technology to achieve surgical navigation -->
 <!-- - Surgical robot: Enable surgical robots to have accurate multi-modal fusion perception ability and precise motion control and can perform precise surgery according to the instructions analyzed by doctors or AI -->
 
-📄[***Latest CV's link***](/pdf/Ph.D_Intern-CV_2024-Jiayi Wu.pdf)
+📄[***Latest CV's link***](/pdf/Ph.D_Intern_2025-Resume-Jiayi Wu.pdf)
 
 # 📢 News
 
