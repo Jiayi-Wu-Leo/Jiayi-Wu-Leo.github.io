@@ -216,7 +216,7 @@ Remote Sensing Laboratory at University of Florida, Gainesville, FL, United Stat
 
 ### COMPETITIONS
 ---
-- *2021.06* Individual `1st Prize` in the National University Graduate Design Competition (Only two people won this award nationwide) 06/2021
+- *2021.06* Individual `1st Prize` in the National University Graduate Design Competition (Only two people won this award nationwide)
 - *2019.10* Provincial `1st Prize` of National 3D Digital Innovative Design Competition
 - *2019.09* `2nd Prize` of National 3dds Competition Classic
 - *2019.06* `3rd Prize` of The 16th Zhejiang Province Mechanical Design Competition for College Student
