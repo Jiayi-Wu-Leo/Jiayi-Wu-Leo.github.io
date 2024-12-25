@@ -211,8 +211,8 @@ Remote Sensing Laboratory at University of Florida, Gainesville, FL, United Stat
 ---
 - *2024* UMIACS Fellowship
 - *2022/2021* UF Herbert Wertheim College of Engineering Engineering Achieve Award 
-- *2020/2018* Zhejiang Government Scholarship
 - *2019* First Class School Financial Aid for Overseas Exchange Program
+<!-- - *2020/2018* Zhejiang Government Scholarship -->
 
 ### COMPETITIONS
 ---
