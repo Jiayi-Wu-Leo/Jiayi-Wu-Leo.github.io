@@ -86,11 +86,19 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Conference Papers
 ---
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Under Review</div><img src='images/VecKM_flow.png' alt="sym" width="108%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+-	Dehao Yuan, Levi Burner, `Jiayi Wu`, Minghui Liu, Jingxi Chen, Yiannis Aloimonos, Cornelia Fermüller. ***Learning Normal Flow Directly From Event Neighborhoods***. *Under Review*  
+[[Arxiv]](https://arxiv.org/abs/2412.11284) [[Code]](https://github.com/dhyuan99/VecKM_flow) [[Video demo]](https://www.cs.umd.edu/~dhyuan/assets/videos/demo.mov)
+</div>
+</div>
+
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">CoRL 2024</div><img src='images/Event3DGS.gif' alt="sym" width="108%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 -	Xiong, Tianyi\*, `Wu, Jiayi`\*, Botao He, Cornelia Fermuller, Yiannis Aloimonos, Heng Huang, and Christopher Metzler. ***Event3DGS: Event-based 3D Gaussian Splatting for High-speed Robot Egomotion***. *CoRL 2024*  
-[[Project Page]](https://tyxiong23.github.io/event3dgs) [[Arxiv]](https://arxiv.org/abs/2406.02972)
+[[Project Page]](https://tyxiong23.github.io/event3dgs) [[Paper]](https://openreview.net/forum?id=EyEE7547vy) [[Video demo]](https://youtu.be/QXbrx1n6h5g)
 </div>
 </div>
 
