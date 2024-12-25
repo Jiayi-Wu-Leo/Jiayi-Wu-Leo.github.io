@@ -26,7 +26,7 @@ Welcome to my academic homepage. I am Jiayi Wu, a Ph.D. student supervised by [P
 <!-- <a href='https://scholar.google.com/citations?user=xoZE1GsAAAAJ&hl'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>. -->
 
 ***My research interest includes:***
-- 3D/4D Generation: Controllable Real World Generation
+- 3D/4D Generation: Controllable real world generation
 - General Environment Vision: Make computer vision systems more robust to the environment (scattering media, bad weather)
 - Active Vision: Feedback control through vision
 
