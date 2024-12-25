@@ -26,10 +26,11 @@ Welcome to my academic homepage. I am Jiayi Wu, a Ph.D. student supervised by [P
 <!-- <a href='https://scholar.google.com/citations?user=xoZE1GsAAAAJ&hl'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>. -->
 
 ***My research interest includes:***
+- 3D/4D Generation: Controllable Real World Generation
 - General Environment Vision: Make computer vision systems more robust to the environment (scattering media, bad weather)
-- Low-cost 3D reconstruction and depth estimation in scattering medium
 - Active Vision: Feedback control through vision
 
+<!-- - Low-cost 3D reconstruction and depth estimation in scattering medium -->
 <!-- - The application of computer vision in the medical field (including but not limited to medical image processing, pathological image segmentation, image enhancement) -->
 <!-- - AI-based Surgical Navigation: Make AI have the ability to generate structured diagnostic reports through medical images, and combine NLP algorithms and computer vision technology to achieve surgical navigation -->
 <!-- - Surgical robot: Enable surgical robots to have accurate multi-modal fusion perception ability and precise motion control and can perform precise surgery according to the instructions analyzed by doctors or AI -->
@@ -132,6 +133,14 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Journals and Thesis
 ---
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Under Review</div><img src='images/AquaFuse3D.gif' alt="sym" width="108%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+-	Md Abu Bakr Siddique, `Jiayi Wu`, Ioannis Rekleitis, and Md Jahidul Islam. ***AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes***. *Under Review*  
+[[Project Page]](https://robopi.ece.ufl.edu/aquafuse.html) [[Arxiv]](https://arxiv.org/pdf/2411.01119) [[Video demo]](https://youtu.be/gj3QFDMY9Ck)
+</div>
+</div>
+
 - `Wu, Jiayi`. ***Low-Cost Depth Estimation and 3D Reconstruction in Scattering Medium***. *Master's Thesis*. 2023  
 [[UFDC]](https://ufdc.ufl.edu/UFE0059937/00001/pdf)
 
