@@ -137,7 +137,7 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Journals and Thesis
 ---
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Under Review</div><img src='images/AquaFuse3D.gif' alt="sym" width="108%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">RA-L</div><img src='images/AquaFuse3D.gif' alt="sym" width="108%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 -	Md Abu Bakr Siddique, `Jiayi Wu`, Ioannis Rekleitis, and Md Jahidul Islam. ***AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes***. *RA-L*  
