@@ -41,7 +41,7 @@ Before that, I worked with [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/) 
 
 # 📢 News
 
-- 2025/03/04: ***Our paper [“AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes”](https://robopi.ece.ufl.edu/aquafuse.html) has been accepted by RA-L !!!***
+<!-- - 2025/03/04: ***Our paper [“AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes”](https://robopi.ece.ufl.edu/aquafuse.html) has been accepted by RA-L !!!*** -->
 
 - 2025/03/01: Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been submitted to IROS 2025.
 
