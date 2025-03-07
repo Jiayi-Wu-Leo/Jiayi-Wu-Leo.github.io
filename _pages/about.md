@@ -127,7 +127,7 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICRA 2023</div><img src='images/udepth.gif' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
--	Yu, Boxiao, `Wu, Jiayi`, Islam, Md Jahidul. ***UDepth: Fast Monocular Depth Estimation for Visually-guided Underwater Robots***. *ICRA 2023* 
+-	Yu, Boxiao, `Wu, Jiayi`, Islam, Md Jahidul. ***UDepth: Fast Monocular Depth Estimation for Visually-guided Underwater Robots***. *ICRA 2023*  
 [[Project Page]](https://robopi.ece.ufl.edu/udepth.html) [[IEEE Xplore]](https://ieeexplore.ieee.org/abstract/document/10161471) [[Video demo]](https://youtu.be/lNK90c5ofVQ) [[Code]](https://github.com/uf-robopi/UDepth)
 
 </div>
