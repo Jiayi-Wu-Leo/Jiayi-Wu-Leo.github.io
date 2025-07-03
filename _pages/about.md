@@ -41,6 +41,8 @@ Before that, I worked with [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/) 
 
 # 📢 News
 
+- 2025/06/25: ***Our paper [“Learning Normal Flow Directly From Event Neighborhoods”](https://arxiv.org/abs/2412.11284) has been accepted by ICCV 2025 !!!***
+
 - 2025/06/15: ***Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been accepted by IROS 2025 !!!***
 
 <!-- - 2025/03/04: ***Our paper [“AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes”](https://robopi.ece.ufl.edu/aquafuse.html) has been accepted by RA-L !!!*** -->
