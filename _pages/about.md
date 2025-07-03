@@ -41,9 +41,11 @@ Before that, I worked with [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/) 
 
 # 📢 News
 
+- 2025/06/15: ***Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been accepted by IROS 2025 !!!***
+
 <!-- - 2025/03/04: ***Our paper [“AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes”](https://robopi.ece.ufl.edu/aquafuse.html) has been accepted by RA-L !!!*** -->
 
-- 2025/03/01: Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been submitted to IROS 2025.
+<!-- - 2025/03/01: Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been submitted to IROS 2025. -->
 
 - 2024/09/04: ***Our paper [“Event3DGS: Event-Based 3D Gaussian Splatting for High-Speed Robot Egomotion”](https://arxiv.org/abs/2406.02972) has been accepted by CoRL 2024 !!!***
 
