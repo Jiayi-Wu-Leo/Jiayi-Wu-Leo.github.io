@@ -91,10 +91,10 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Conference Papers
 ---
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">Under Review</div><img src='images/VecKM_flow.png' alt="sym" width="108%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICCV 2025</div><img src='images/VecKM_flow.png' alt="sym" width="108%"></div></div>
 <div class='paper-box-text' markdown="1">
 
--	Dehao Yuan, Levi Burner, `Jiayi Wu`, Minghui Liu, Jingxi Chen, Yiannis Aloimonos, Cornelia Fermüller. ***Learning Normal Flow Directly From Event Neighborhoods***. *Under Review*  
+-	Dehao Yuan, Levi Burner, `Jiayi Wu`, Minghui Liu, Jingxi Chen, Yiannis Aloimonos, Cornelia Fermüller. ***Learning Normal Flow Directly From Event Neighborhoods***. *ICCV 2025*  
 [[Arxiv]](https://arxiv.org/abs/2412.11284) [[Code]](https://github.com/dhyuan99/VecKM_flow) [[Video demo]](https://www.cs.umd.edu/~dhyuan/assets/videos/demo.mov)
 </div>
 </div>
