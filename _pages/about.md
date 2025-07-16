@@ -41,6 +41,8 @@ Before that, I worked with [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/) 
 
 # 📢 News
 
+- 2025/07/02: ***Our paper [“Single-Step Latent Diffusion for Underwater Image Restoration”](https://arxiv.org/abs/2507.07878) has been accepted by TPAMI(will present on ICCP 2025) !!!***
+
 - 2025/06/25: ***Our paper [“Learning Normal Flow Directly From Event Neighborhoods”](https://arxiv.org/abs/2412.11284) has been accepted by ICCV 2025 !!!***
 
 - 2025/06/15: ***Our paper [“ViewActive: Active viewpoint optimization from a single image”](https://arxiv.org/abs/2409.09997) has been accepted by IROS 2025 !!!***
