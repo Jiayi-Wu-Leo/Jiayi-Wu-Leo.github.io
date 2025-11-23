@@ -97,6 +97,14 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Conference Papers
 ---
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">TPAMI & ICCP 2025</div><img src='images/SLURPP.gif' alt="sym" width="100%"></div></div>
+<div class='paper-box-text' markdown="1">
+
+-	`Jiayi Wu`\*, Tianfu Wang\*, Md Abu Bakr Siddique, Md Jahidul Islam, Cornelia Fermuller, Yiannis Aloimonos, Christopher A. Metzler. ***Single-Step Latent Diffusion for Underwater Image Restoration***. *TPAMI & ICCP 2025*  
+[[Project Page]](https://tianfwang.github.io/slurpp/) [[Code]](https://github.com/kongdai123/SLURPP) [[Poster]](https://drive.google.com/file/d/1j8DXnnAuohFGGReCcXcu4wuy_yOt0-Jm/view?usp=sharing)
+</div>
+</div>
+
 <div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICCV 2025</div><img src='images/VecKM_flow.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
