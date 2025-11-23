@@ -97,7 +97,7 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 
 ### Conference Papers
 ---
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICCV 2025</div><img src='images/VecKM_flow.png' alt="sym" width="108%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">ICCV 2025</div><img src='images/VecKM_flow.png' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 -	Dehao Yuan, Levi Burner, `Jiayi Wu`, Minghui Liu, Jingxi Chen, Yiannis Aloimonos, Cornelia Fermüller. ***Learning Normal Flow Directly From Event Neighborhoods***. *ICCV 2025*  
@@ -105,7 +105,7 @@ Supervised by [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/).
 </div>
 </div>
 
-<div class='paper-box'><div class='paper-box-image'><div><div class="badge">IROS 2025</div><img src='images/ViewActive_teaser.jpg' alt="sym" width="108%"></div></div>
+<div class='paper-box'><div class='paper-box-image'><div><div class="badge">IROS 2025</div><img src='images/ViewActive_teaser.jpg' alt="sym" width="100%"></div></div>
 <div class='paper-box-text' markdown="1">
 
 -	`Jiayi Wu`, Xiaomin Lin, Botao He, Cornelia Fermüller, Yiannis Aloimonos. ***ViewActive: Active viewpoint optimization from a single image***. *IROS 2025*  
