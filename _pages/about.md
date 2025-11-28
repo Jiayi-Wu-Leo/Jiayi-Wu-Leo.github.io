@@ -37,7 +37,7 @@ Before that, I worked with [Prof. Md Jahidul Islam](https://jahid.ece.ufl.edu/) 
 <!-- - AI-based Surgical Navigation: Make AI have the ability to generate structured diagnostic reports through medical images, and combine NLP algorithms and computer vision technology to achieve surgical navigation -->
 <!-- - Surgical robot: Enable surgical robots to have accurate multi-modal fusion perception ability and precise motion control and can perform precise surgery according to the instructions analyzed by doctors or AI -->
 
-📄[***Latest CV's link***](/pdf/Ph.D_Intern_2025-Resume-Jiayi Wu.pdf)
+📄[***Latest CV's link***](/pdf/Ph.D_Intern_Summer2026-Resume-Jiayi Wu.pdf)
 
 # 📢 News
 
