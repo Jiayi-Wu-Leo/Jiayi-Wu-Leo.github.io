@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jiayi Wu is a Ph.D. student at the University of Maryland, College Park, working on 3D vision, robotics, active vision, and underwater robotics.">
+  <meta name="google-site-verification" content="fQZQD0EwLaSOrp3EbALt2rjxHEY9pUvWuh1fS96xgNk">
+  <meta name="msvalidate.01" content="56D1B3DBCF345410DA9431AFE01788E7">
+  <meta name="color-scheme" content="dark light">
+  <title>Jiayi Wu | Academic Homepage</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./assets/images/Personal%20Icon.png" type="image/png">
+
+  <!--
+    - custom css link
+  -->
+  <script>
+    const savedTheme = localStorage.getItem("theme-mode") || localStorage.getItem("theme");
+    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    document.documentElement.dataset.theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : (prefersLight ? "light" : "dark");
+  </script>
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--
+    - #MAIN
+  -->
+
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="./assets/images/Personal%20Icon.png" alt="Jiayi Wu" width="104">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Jiayi Wu">Jiayi Wu</h1>
+
+          <p class="title">Ph.D. Student</p>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="school-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Affiliation</p>
+
+              <p class="contact-link">University of Maryland, College Park</p>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="flask-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Research</p>
+
+              <p class="contact-link">3D Vision & Robotics</p>
+            </div>
+
+          </li>
+
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+
+          <li class="social-item">
+            <a href="mailto:jiayiwu@umd.edu" class="social-link" aria-label="Email">
+              <ion-icon name="mail-outline"></ion-icon>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://scholar.google.com/citations?user=xoZE1GsAAAAJ&hl=en" class="social-link" aria-label="Google Scholar">
+              <svg class="social-svg-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M213 111l-107 94h69c5 45 41 64 78 67-7 18-4 27 7 39-43 1-103 26-103 67 4 45 63 54 92 54 38 1 81-19 90-54 4-35-10-54-31-71-23-18-28-28-21-40 15-17 35-27 39-51 2-17-2-28-6-43l45-38-1 16c-3 2-5 6-5 9v103c2 13 22 11 23 0V160c0-3-2-7-5-8v-25l16-16zm58 141c-61 10-87-87-38-99 56-11 83 86 38 99zm-5 73c60 13 61 63 10 78-44 9-82-4-81-30 0-25 35-48 71-48z"/>
+              </svg>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://github.com/jiayi-wu-umd" class="social-link" aria-label="GitHub">
+              <ion-icon name="logo-github"></ion-icon>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://www.linkedin.com/in/jiayi-wu-leo" class="social-link" aria-label="LinkedIn">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://orcid.org/0009-0004-6601-4963" class="social-link" aria-label="ORCID">
+              <svg class="social-svg-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M16 0c-8.839 0-16 7.161-16 16s7.161 16 16 16c8.839 0 16-7.161 16-16s-7.161-16-16-16zM9.823 5.839c0.704 0 1.265 0.573 1.265 1.26 0 0.688-0.561 1.265-1.265 1.265-0.692-0.004-1.26-0.567-1.26-1.265 0-0.697 0.563-1.26 1.26-1.26zM8.864 9.885h1.923v13.391h-1.923zM13.615 9.885h5.197c4.948 0 7.125 3.541 7.125 6.703 0 3.439-2.687 6.699-7.099 6.699h-5.224zM15.536 11.625v9.927h3.063c4.365 0 5.365-3.312 5.365-4.964 0-2.687-1.713-4.963-5.464-4.963z"/>
+              </svg>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://twitter.com/Jiayi_Wu_Leo" class="social-link" aria-label="Twitter">
+              <ion-icon name="logo-twitter"></ion-icon>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </aside>
+
+
+
+
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+
+        <div class="navbar-links">
+
+          <span class="navbar-indicator" aria-hidden="true"></span>
+
+          <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <button class="navbar-link  active" data-nav-link>About</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Resume</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Portfolio</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Contact</button>
+          </li>
+
+          </ul>
+
+        </div>
+
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+          <ion-icon name="contrast-outline"></ion-icon>
+          <span data-theme-toggle-text>Theme</span>
+        </button>
+
+      </nav>
+
+
+
+
+
+      <!--
+        - #ABOUT
+      -->
+
+      <article class="about  active" data-page="about">
+
+        <header>
+          <h2 class="h2 article-title greeting-title" data-greeting-title tabindex="0" role="button" aria-label="Hello there! Activate to change greeting.">
+            <span data-greeting-text></span>
+          </h2>
+        </header>
+
+        <section class="about-text">
+          <p>
+            I am Jiayi Wu, a 3rd-year Ph.D. student supervised by
+            <a href="http://users.umiacs.umd.edu/~yiannis/">Prof. Yiannis Aloimonos</a> at the
+            <a href="http://prg.cs.umd.edu/">Perception &amp; Robotics Group</a>,
+            <a href="https://www.cs.umd.edu/">University of Maryland, College Park</a>.
+          </p>
+
+          <p>
+            My research focuses on 3D vision and robotics, especially 3D/4D generation, active vision,
+            and field robotics with an emphasis on underwater robotics. Inspired by nature, I aim to
+            build world generators, simulators, and robot perception systems that challenge existing
+            paradigms and redefine the future of 3D vision and robotics.
+          </p>
+
+          <p>
+            Before joining UMD, I worked with
+            <a href="https://jahid.ece.ufl.edu/">Prof. Md Jahidul Islam</a> and completed my Master's
+            thesis under his supervision.
+          </p>
+        </section>
+
+        <section class="service">
+
+          <h3 class="h3 service-title">Research Interests</h3>
+
+          <ul class="service-list research-interests">
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./assets/images/3dcube-svgrepo-com.svg" alt="" width="40" height="40" aria-hidden="true">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">World Reconstruction and Generation</h4>
+                <p class="service-item-text">
+                  3D/4D reconstruction, view synthesis, and world models for simulation and embodied AI.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./assets/images/brain-13-svgrepo-com.svg" alt="" width="40" height="40" aria-hidden="true">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Robust and Active Vision</h4>
+                <p class="service-item-text">
+                  Reliable perception in harsh conditions and closed-loop vision for deliberate sensing.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./assets/images/camera-shutter-svgrepo-com.svg" alt="" width="40" height="40" aria-hidden="true">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Physics-informed generative model</h4>
+                <p class="service-item-text">
+                  Generative modeling constrained by physical structure for plausible dynamics and simulation.
+                </p>
+              </div>
+
+            </li>
+
+          </ul>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="megaphone-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">News</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Single-Step Latent Diffusion for Underwater Image Restoration accepted by TPAMI</h4>
+              <span>2025/07/02</span>
+              <p class="timeline-text">
+                The paper will be presented at ICCP 2025.
+              </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Learning Normal Flow Directly From Event Neighborhoods accepted by ICCV 2025</h4>
+              <span>2025/06/25</span>
+              <p class="timeline-text">
+                Work on event-based normal flow estimation with collaborators at UMD.
+              </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">ViewActive accepted by IROS 2025</h4>
+              <span>2025/06/15</span>
+              <p class="timeline-text">
+                Active viewpoint optimization from a single image.
+              </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Event3DGS accepted by CoRL 2024</h4>
+              <span>2024/09/04</span>
+              <p class="timeline-text">
+                Event-based 3D Gaussian Splatting for high-speed robot egomotion.
+              </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">MARVIS accepted by IROS 2024</h4>
+              <span>2024/06/30</span>
+              <p class="timeline-text">
+                Motion and geometry aware real and virtual image segmentation.
+              </p>
+            </li>
+
+          </ol>
+
+        </section>
+
+      </article>
+
+
+
+
+
+      <!--
+        - #RESUME
+      -->
+
+      <article class="resume" data-page="resume">
+
+        <header>
+          <h2 class="h2 article-title">Academic CV</h2>
+        </header>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="school-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Education</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/UMD_logo.png" alt="University of Maryland logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">University of Maryland, College Park</h4>
+
+                <span>Aug. 2023 - Present</span>
+
+                <p class="timeline-text">
+                  Ph.D. in Computer Science. Supervised by
+                  <a href="http://users.umiacs.umd.edu/~yiannis/">Prof. Yiannis Aloimonos</a>.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/UFL_logo.png" alt="University of Florida logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">University of Florida</h4>
+
+                <span>Aug. 2021 - May 2023</span>
+
+                <p class="timeline-text">
+                  M.S. (Thesis) in Electrical and Computer Engineering. Supervised by
+                  <a href="https://jahid.ece.ufl.edu/">Prof. Md Jahidul Islam</a>.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/ZSTU_logo.png" alt="Zhejiang Sci-Tech University logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Zhejiang Sci-Tech University</h4>
+
+                <span>Sept. 2017 - Jun. 2021</span>
+
+                <p class="timeline-text">
+                  B.E. in Mechatronic Engineering. 2021 Outstanding Graduate.
+                </p>
+              </div>
+
+            </li>
+
+          </ol>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="briefcase-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Experience</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/prime_video_logo.png" alt="Prime Video logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Applied Scientist Intern</h4>
+
+                <span>Mar. 2026 - Present</span>
+
+                <p class="entry-summary">3D-consistent and physically plausible video generation at Prime Video &amp; Amazon MGM Studios.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    Seattle, WA, United States.
+                  </p>
+                </div>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/UMD_logo.png" alt="University of Maryland logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Ph.D. in Computer Science</h4>
+
+                <span>Aug. 2023 - Present</span>
+
+                <p class="entry-summary">Computer vision and robotics research at the University of Maryland.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    University of Maryland, College Park, MD, United States.
+                  </p>
+                  <ul class="timeline-bullets">
+                    <li>Proposed SLURPP, a single-stage latent diffusion model with dual-branch tailored for physically accurate scattering medium decomposition, achieving ~3dB PSNR gain and 200&times; speedup for underwater image restoration (accepted by TPAMI).</li>
+                    <li>Proposed a point-based normal flow estimator using a local point cloud encoder to predict per-event flow, enabling sharp, robust, and transferable predictions with uncertainty quantification, and supporting an IMU-based egomotion solver for challenging scenarios (accepted by ICCV 2025).</li>
+                    <li>Proposed ViewActive, a novel framework for active viewpoint optimization that mimics human-like spatial reasoning to enhance robotic perception (accepted by IROS 2025).</li>
+                    <li>Proposed Event3DGS, an event-based 3D Gaussian Splatting method that achieves state-of-the-art reconstruction quality and significantly accelerates training and rendering (accepted by CoRL 2024).</li>
+                    <li>Proposed MARVIS, a cutting-edge solution for real-virtual image segmentation near water surfaces, effectively leveraging synthetic data and domain-invariant features (accepted by IROS 2024).</li>
+                    <li>Teaching Assistant for CMSC426 Computer Vision.</li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/dolby_logo.png" alt="Dolby logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Ph.D. Research Intern</h4>
+
+                <span>May 2025 - Aug. 2025</span>
+
+                <p class="entry-summary">3D live broadcasting for large-scale sports with high-fidelity scene reconstruction.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    Dolby Laboratories, Sunnyvale, CA, United States.
+                  </p>
+                  <ul class="timeline-bullets">
+                    <li>Proposed a 3D live broadcasting solution for large-scale sports, integrating a 3D tracking foundation model prior to 4D sparse-view inverse rendering for high-fidelity scene reconstruction (Patent pending).</li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/UFL_logo.png" alt="University of Florida logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">3D Vision Research Intern (Master&rsquo;s Thesis)</h4>
+
+                <span>Jan. 2022 - Jun. 2023</span>
+
+                <p class="entry-summary">Master&rsquo;s thesis research on underwater 3D vision and depth estimation in RoboPI Lab.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    University of Florida · RoboPI Lab, Gainesville, FL, United States.
+                  </p>
+                  <ul class="timeline-bullets">
+                    <li>Proposed AquaFuse, a physics-based waterbody fusion method for underwater imagery that preserves depth and object geometry, enabling geometry-consistent data augmentation and accurate 3D view synthesis with 94% depth and 90&ndash;95% structural similarity (accepted by RA-L).</li>
+                    <li>Proposed a 3D underwater reconstruction pipeline using pixel-wise depth guidance for sparse-to-semi-dense point clouds, reducing 2D feature reliance and achieving 3&times; faster inference with higher reconstruction accuracy (Best Paper Award at IEEE CAI 2023).</li>
+                    <li>Formulated a robust and efficient monocular depth estimation model named UDepth, by incorporating underwater domain knowledge into its supervised learning pipeline (accepted by ICRA 2023).</li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/UFL_logo.png" alt="University of Florida logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Student Research Assistant (Automated Script Modeling)</h4>
+
+                <span>Jan. 2022 - Jan. 2023</span>
+
+                <p class="entry-summary">Programmatic 3D modeling and dynamic scene generation for remote sensing applications.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    Remote Sensing Laboratory, University of Florida, Gainesville, FL, United States.
+                  </p>
+                  <ul class="timeline-bullets">
+                    <li>Generate complex 3D models programmatically.</li>
+                    <li>Connect the program with the database to realize the dynamic real-time 3D model.</li>
+                    <li>3 papers accepted by IGARSS 2023, IEEE TGRS and IEEE JSTARS.</li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+
+            <li class="timeline-item education-item">
+
+              <img class="education-logo" src="./assets/images/vobile_logo.png" alt="Vobile logo">
+
+              <div class="education-details">
+                <h4 class="h4 timeline-item-title">Digital Audio and Video Algorithm Intern</h4>
+
+                <span>May 2022 - Aug. 2022</span>
+
+                <p class="entry-summary">Learning-based video retrieval and psychoacoustic audio fingerprint encoding.</p>
+
+                <div class="entry-details">
+                  <p class="timeline-text">
+                    Vobile, Santa Clara, CA, United States.
+                  </p>
+                  <ul class="timeline-bullets">
+                    <li>Developed and implemented a learning-based video retrieval system based on global feature and local feature fusion. And also wrote the user manual and targeted model performance optimization guidelines document of the system.</li>
+                    <li>Conducted a number of qualitative phase-shift auditory tests and found a relationship between the phase-shift cases and the psychoacoustic model. Upgraded the audio fingerprint encoding algorithm based on the classic psychoacoustic model. The upgraded algorithm can encode not only the sound pressure level of the audio fingerprint but also the threshold of its phase shift (implemented in C and MATLAB).</li>
+                  </ul>
+                </div>
+              </div>
+
+            </li>
+
+          </ol>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="trophy-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Honors and Awards</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">UMIACS Fellowship</h4>
+              <span>2024</span>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">UF Herbert Wertheim College of Engineering Engineering Achieve Award</h4>
+              <span>2021 / 2022</span>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">First Class School Financial Aid for Overseas Exchange Program</h4>
+              <span>2019</span>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">National University Graduate Design Competition, Individual 1st Prize</h4>
+              <span>2021.06</span>
+              <p class="timeline-text">
+                Only two people won this award nationwide.
+              </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">National 3D Digital Innovative Design Competition, Provincial 1st Prize</h4>
+              <span>2019.10</span>
+            </li>
+
+          </ol>
+
+        </section>
+
+        <section class="skill academic-services">
+
+          <h3 class="h3 skills-title">Academic Services</h3>
+
+          <div class="content-card academic-services-card">
+            <h4 class="h4 timeline-item-title">Reviewer</h4>
+            <p class="timeline-text">
+              ICLR, NeurIPS, ICRA, IROS, TPAMI, RA-L, and IEEE JOE, etc.
+            </p>
+          </div>
+
+        </section>
+
+      </article>
+
+
+
+
+
+      <!--
+        - #PORTFOLIO
+      -->
+
+      <article class="portfolio" data-page="portfolio">
+
+        <header>
+          <h2 class="h2 article-title">Research</h2>
+        </header>
+
+        <section class="projects">
+
+          <ul class="filter-list">
+
+            <li class="filter-item">
+              <button class="active" data-filter-btn>All</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Publications</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Patents</button>
+            </li>
+
+          </ul>
+
+          <div class="filter-select-box">
+
+            <button class="filter-select" data-select>
+
+              <div class="select-value" data-selecct-value>Select category</div>
+
+              <div class="select-icon">
+                <ion-icon name="chevron-down"></ion-icon>
+              </div>
+
+            </button>
+
+            <ul class="select-list">
+
+              <li class="select-item">
+                <button data-select-item>All</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Publications</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Patents</button>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <ul class="project-list">
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/SLURPP.gif" alt="Single-Step Latent Diffusion for Underwater Image Restoration" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">Single-Step Latent Diffusion for Underwater Image Restoration</h3>
+                  <p class="project-category">TPAMI &amp; ICCP 2025</p>
+                  <p class="project-description">
+                    Single-step latent diffusion for fast underwater image restoration in challenging scattering media.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://tianfwang.github.io/slurpp/"><ion-icon name="globe-outline"></ion-icon> Project</a>
+                    <a href="https://arxiv.org/abs/2507.07878"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://github.com/kongdai123/SLURPP"><ion-icon name="code-slash-outline"></ion-icon> Code</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/VecKM_flow.png" alt="Learning Normal Flow Directly From Event Neighborhoods" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">Learning Normal Flow Directly From Event Neighborhoods</h3>
+                  <p class="project-category">ICCV 2025</p>
+                  <p class="project-description">
+                    Event-based normal flow estimation directly from local event neighborhoods.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://arxiv.org/abs/2412.11284"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://github.com/dhyuan99/VecKM_flow"><ion-icon name="code-slash-outline"></ion-icon> Code</a>
+                    <a href="https://www.cs.umd.edu/~dhyuan/assets/videos/demo.mov"><ion-icon name="play-circle-outline"></ion-icon> Video</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/ViewActive_teaser.jpg" alt="ViewActive" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">ViewActive: Active Viewpoint Optimization From a Single Image</h3>
+                  <p class="project-category">IROS 2025</p>
+                  <p class="project-description">
+                    Active viewpoint optimization from a single image for perception-aware scene understanding.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://arxiv.org/abs/2409.09997"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://github.com/jiayi-wu-umd/ViewActive"><ion-icon name="code-slash-outline"></ion-icon> Code</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/Event3DGS.gif" alt="Event3DGS" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">Event3DGS: Event-Based 3D Gaussian Splatting for High-Speed Robot Egomotion</h3>
+                  <p class="project-category">CoRL 2024</p>
+                  <p class="project-description">
+                    Event-based 3D Gaussian Splatting for reconstructing high-speed robot egomotion.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://tyxiong23.github.io/event3dgs"><ion-icon name="globe-outline"></ion-icon> Project</a>
+                    <a href="https://openreview.net/forum?id=EyEE7547vy"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://youtu.be/QXbrx1n6h5g"><ion-icon name="play-circle-outline"></ion-icon> Video</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/MARVIS.gif" alt="MARVIS" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">MARVIS: Motion &amp; Geometry Aware Real and Virtual Image Segmentation</h3>
+                  <p class="project-category">IROS 2024</p>
+                  <p class="project-description">
+                    Motion and geometry aware segmentation across real and virtual images.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://arxiv.org/abs/2403.09850"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/SDU_SfM.gif" alt="3D Reconstruction of Underwater Scenes" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">3D Reconstruction of Underwater Scenes Using Nonlinear Domain Projection</h3>
+                  <p class="project-category">IEEE CAI 2023, Best Paper Award</p>
+                  <p class="project-description">
+                    Depth-guided underwater 3D reconstruction with nonlinear domain projection.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://ieeexplore.ieee.org/document/10195131"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://youtu.be/roiOpPyAvZ0"><ion-icon name="play-circle-outline"></ion-icon> Video</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/udepth.gif" alt="UDepth" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">UDepth: Fast Monocular Depth Estimation for Visually-Guided Underwater Robots</h3>
+                  <p class="project-category">ICRA 2023</p>
+                  <p class="project-description">
+                    Fast monocular underwater depth estimation for visually guided robotic systems.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://robopi.ece.ufl.edu/udepth.html"><ion-icon name="globe-outline"></ion-icon> Project</a>
+                    <a href="https://ieeexplore.ieee.org/abstract/document/10161471"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://github.com/uf-robopi/UDepth"><ion-icon name="code-slash-outline"></ion-icon> Code</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="publications">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/AquaFuse3D.gif" alt="AquaFuse" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">AquaFuse: Waterbody Fusion for Physics Guided View Synthesis of Underwater Scenes</h3>
+                  <p class="project-category">RA-L</p>
+                  <p class="project-description">
+                    Physics-guided underwater view synthesis by fusing waterbody information with scene geometry.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://robopi.ece.ufl.edu/aquafuse.html"><ion-icon name="globe-outline"></ion-icon> Project</a>
+                    <a href="https://arxiv.org/pdf/2411.01119"><ion-icon name="document-text-outline"></ion-icon> Paper</a>
+                    <a href="https://youtu.be/gj3QFDMY9Ck"><ion-icon name="play-circle-outline"></ion-icon> Video</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="patents">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/CN212400777U-stitched.png" alt="Stilt Type Deformation Wheel patent figures" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">Stilt Type Deformation Wheel</h3>
+                  <p class="project-category">CN212400777U</p>
+                  <p class="project-description">
+                    Patent for a deformable stilt-type wheel mechanism.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://patents.google.com/patent/CN212400777U"><ion-icon name="document-text-outline"></ion-icon> Patent</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="project-item active" data-filter-item data-category="patents">
+              <div class="project-card">
+                <figure class="project-img">
+                  <img src="./assets/images/CN113511087A-stitched.png" alt="Unmanned Automobile Automatic Charging System patent figures" loading="lazy">
+                </figure>
+
+                <div class="project-content">
+                  <h3 class="project-title">Unmanned Automobile Automatic Charging System and Charging Docking Method</h3>
+                  <p class="project-category">CN113511087A</p>
+                  <p class="project-description">
+                    Patent for an automatic charging system and docking method for unmanned automobiles.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://patents.google.com/patent/CN113511087A"><ion-icon name="document-text-outline"></ion-icon> Patent</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+
+
+
+
+      <!--
+        - #CONTACT
+      -->
+
+      <article class="contact" data-page="contact">
+
+        <header>
+          <h2 class="h2 article-title">Contact</h2>
+        </header>
+
+        <section class="service">
+
+          <h3 class="h3 service-title">Get in Touch</h3>
+
+          <ul class="service-list">
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="mail-outline"></ion-icon>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Email</h4>
+                <p class="service-item-text">
+                  <a href="mailto:jiayiwu@umd.edu">jiayiwu@umd.edu</a>
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="school-outline"></ion-icon>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Lab</h4>
+                <p class="service-item-text">
+                  <a href="http://prg.cs.umd.edu/">Perception &amp; Robotics Group</a>
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="logo-github"></ion-icon>
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">GitHub</h4>
+                <p class="service-item-text">
+                  <a href="https://github.com/jiayi-wu-umd">jiayi-wu-umd</a>
+                </p>
+              </div>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+    </div>
+
+  </main>
+
+
+
+
+
+
+  <!-- GoatCounter (counts visits on jiayi-wu-leo.github.io) -->
+  <script data-goatcounter="https://jiayi-wu-leo.goatcounter.com/count"
+    async src="https://gc.zgo.at/count.js"></script>
+
+  <!--
+    - custom js link
+  -->
+  <script src="./assets/js/script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
