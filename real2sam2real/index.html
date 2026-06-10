@@ -132,6 +132,7 @@
   html,body { margin:0; padding:0; background:var(--bg); color:var(--fg);
     font-family: ui-rounded, "Arial Rounded MT Bold", "Varela Round", "Trebuchet MS", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    overflow-x: clip;            /* safety: any 100vw breakout never causes horizontal scroll. clip (vs hidden) does not break position:sticky on the jump-nav. */
     transition: background-color 0.3s ease, color 0.3s ease; }
   body { background: transparent; }
 
@@ -465,8 +466,38 @@
     .gallery-carousel { --cmp-step: 90; }
     .gallery-carousel .cmp-slide { flex-basis: 90%; }
   }
-  @media (max-width: 900px) {
-    .reshoot-pair { grid-template-columns: 1fr; gap: 24px; }
+  /* No vertical-stack intermediate state: either side-by-side (>1024px) or the
+     scroll-snap carousel (≤1024px). 1024 is chosen so each item is wide enough
+     to keep the longest italic prompt on a single line. */
+  .reshoot-carousel { position: relative; }
+  .reshoot-nav { display: none; }
+  /* Arrows live in DOM at all widths but only show in carousel mode. */
+  .reshoot-carousel > .cmp-arrow { display: none; }
+  @media (max-width: 1024px) {
+    .reshoot-pair {
+      display: flex; gap: 0;
+      overflow-x: auto; overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 14px 6px; margin-left: -14px; margin-right: -14px;
+      scroll-padding: 0 14px;
+    }
+    .reshoot-pair::-webkit-scrollbar { display: none; }
+    .reshoot-item {
+      flex: 0 0 100%; scroll-snap-align: center;
+      padding: 0 4px; box-sizing: border-box;
+    }
+    /* Arrows flank the slide (same as the other carousels); dots sit centered
+       below. */
+    .reshoot-carousel > .cmp-arrow { display: flex; }
+    .reshoot-nav {
+      display: flex; align-items: center; justify-content: center;
+      margin: 16px auto 0;
+    }
+    .reshoot-nav .reshoot-dots {
+      display: flex; gap: 8px; align-items: center;
+    }
   }
   .cell { margin: 0; }
   .cell .media {
@@ -695,40 +726,67 @@
   }
   .cmp-thumb.is-active::after { opacity: 1; }
 
+  /* Section jump nav — a floating glass dock. Wide: sticky at top, hugs its
+     content. Narrow: fixed at bottom (override block below). Same pill-style
+     visual language in both modes. */
   .jump-nav {
-    position: sticky; top: 0; z-index: 30;
-    margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
-    padding: 16px 0 30px;
+    position: sticky; top: 12px; z-index: 30;
+    /* Reserve ~90px on the right so the floating theme toggle never overlaps
+       the dock; the wider value scales with viewport. */
+    width: fit-content; max-width: min(calc(100vw - 180px), 1100px);
+    margin: 16px auto 30px;
+    padding: 0;
     display: flex; align-items: center;
   }
-  /* Glass background lives on a pseudo-element so the buttons stay fully
-     opaque; it fades in only once the bar sticks to the top. */
+  /* Glass capsule background. Uses a dock-local var so dark mode can brighten
+     the dock without affecting other glass surfaces (theme toggle, arrows). */
+  .jump-nav {
+    --dock-bg: var(--glass-bg);
+    --dock-border: var(--glass-border);
+  }
+  :root[data-theme="dark"] .jump-nav {
+    --dock-bg: rgba(46,58,82,0.78);
+    --dock-border: rgba(180,197,225,0.28);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .jump-nav {
+      --dock-bg: rgba(46,58,82,0.78);
+      --dock-border: rgba(180,197,225,0.28);
+    }
+  }
   .jump-nav::before {
     content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: linear-gradient(180deg, var(--nav-bg) 0%, var(--nav-bg) 84%, transparent 100%);
-    -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
-    opacity: var(--nav-glass, 0);
-    -webkit-backdrop-filter: saturate(calc(100% + 60% * var(--nav-glass, 0))) blur(calc(10px * var(--nav-glass, 0)));
-    backdrop-filter: saturate(calc(100% + 60% * var(--nav-glass, 0))) blur(calc(10px * var(--nav-glass, 0)));
+    border-radius: 999px;
+    background: var(--dock-bg);
+    border: 1px solid var(--dock-border);
+    box-shadow: var(--shadow-md);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    backdrop-filter: saturate(180%) blur(14px);
   }
   .jump-nav .jump-links {
-    display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap;
-    width: 100%; max-width: 2000px; margin: 0 auto; padding: 0 12px; box-sizing: border-box;
+    display: flex; gap: 4px; align-items: center;
+    flex-wrap: nowrap;
+    margin: 0; padding: 6px 8px; box-sizing: border-box;
+    border-radius: inherit;
+    /* Allow horizontal scrolling when the dock is constrained (e.g. theme
+       toggle on the right or just-too-narrow viewport). The edge-fade mask
+       hints "more →" without an arrow button. */
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    max-width: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
   }
+  .jump-nav .jump-links::-webkit-scrollbar { display: none; }
   .jump-nav a {
     position: relative; display: inline-flex; align-items: center; line-height: 1;
-    padding: 10px 6px; background: transparent; color: var(--muted);
-    font-size: 16px; font-weight: 500; text-decoration: none; letter-spacing: 0.01em;
-    transition: color 180ms ease;
-  }
-  /* Minimal underline indicator — grows from center on hover, sits solid when current.
-     Uses the Remotion teaser's blue→purple brand gradient. */
-  .jump-nav a::after {
-    content: ''; position: absolute; left: 6px; right: 6px; bottom: 2px; height: 2px;
-    background: linear-gradient(90deg, #7aa7ff 0%, #d7a5dd 100%); border-radius: 2px;
-    transform: scaleX(0); transform-origin: center;
-    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    flex: 0 0 auto; white-space: nowrap;
+    padding: 8px 14px; background: transparent; color: var(--muted);
+    font-size: 14px; font-weight: 500; text-decoration: none; letter-spacing: 0.01em;
+    border-radius: 999px;
+    transition: color 180ms ease, background-color 180ms ease;
   }
   .jump-nav a:hover,
   .jump-nav a.is-current {
@@ -737,9 +795,57 @@
     -webkit-text-fill-color: transparent; color: transparent;
   }
   .jump-nav a.is-current { font-weight: 600; }
-  .jump-nav a:hover::after,
-  .jump-nav a.is-current::after { transform: scaleX(1); }
-  [id^="sec-"] { scroll-margin-top: 110px; }
+  [id^="sec-"] { scroll-margin-top: 80px; }
+
+  /* Narrow viewport: replace the wrapping top bar with a floating bottom dock —
+     a single-line glass pill, horizontally swipeable with edge-fade hints.
+     iPhone safe-area honored via env(safe-area-inset-bottom). */
+  @media (max-width: 768px) {
+    .jump-nav {
+      position: fixed; top: auto; left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      margin: 0; padding: 0;
+      width: min(calc(100vw - 24px), 720px);
+      z-index: 40;
+    }
+    /* Glass capsule (inherits --dock-bg/--dock-border with dark-mode
+       brightening defined alongside the wide-mode rule). */
+    .jump-nav::before {
+      inset: 0; border-radius: 999px; opacity: 1;
+      background: var(--dock-bg);
+      border: 1px solid var(--dock-border);
+      box-shadow: var(--shadow-md);
+      -webkit-mask-image: none; mask-image: none;
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      backdrop-filter: saturate(180%) blur(14px);
+    }
+    .jump-nav .jump-links {
+      flex-wrap: nowrap;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      justify-content: flex-start;
+      gap: 4px; padding: 6px 14px;
+      max-width: none;
+      border-radius: inherit;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    }
+    .jump-nav .jump-links::-webkit-scrollbar { display: none; }
+    .jump-nav a {
+      flex: 0 0 auto; white-space: nowrap;
+      padding: 8px 12px; font-size: 13px;
+      border-radius: 999px;
+    }
+    /* Underline indicator looks awkward inside a pill; the brand-gradient text
+       fill on .is-current / hover is enough to convey the active state. */
+    .jump-nav a::after { display: none; }
+    /* Make room so the floating dock never covers footer / scroll-to-top. */
+    .results-wrap { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+    .scroll-to-top { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  }
 
   /* BibTeX */
   .bibtex-wrap {
@@ -803,16 +909,21 @@
   .theme-ic-sun { color: #f59e0b; }
   .theme-ic-moon { color: #94a3b8; }
   .theme-toggle-knob {
-    position: absolute; top: 3px; left: 3px;
+    /* Vertically pinned to the track center with translateY(-50%); the X
+       movement is layered via a per-mode --knob-x custom property so the two
+       transforms don't fight each other and the knob stays perfectly centered
+       at any track size. */
+    position: absolute; top: 50%; left: 3px;
     width: 24px; height: 24px; border-radius: 999px;
     background: linear-gradient(180deg, #fff, #eef2f7);
     box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    transform: translate3d(var(--knob-x, 0), -50%, 0);
     transition: transform 0.28s cubic-bezier(0.22,1,0.36,1);
   }
   /* dark mode: knob slides right */
-  :root[data-theme="dark"] .theme-toggle-knob { transform: translateX(30px); background: linear-gradient(180deg, #2b3650, #1c2740); }
+  :root[data-theme="dark"] .theme-toggle-knob { --knob-x: 30px; background: linear-gradient(180deg, #2b3650, #1c2740); }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .theme-toggle-knob { transform: translateX(30px); background: linear-gradient(180deg, #2b3650, #1c2740); }
+    :root:not([data-theme="light"]) .theme-toggle-knob { --knob-x: 30px; background: linear-gradient(180deg, #2b3650, #1c2740); }
   }
 
   @media (max-width: 900px) {
@@ -823,6 +934,131 @@
   @media (max-width: 560px) {
     .grid, .legend { grid-template-columns: repeat(2, 1fr); }
     .jump-nav a { padding: 8px 14px; font-size: 13px; }
+  }
+
+  /* ============== Systematic responsive pass ==============
+     Target: phone portrait (~360-430px) and tablet (640-900px).
+     Goals: no horizontal scroll, hero/title fit, multi-column grids stack,
+     spacing/typography proportionate. */
+
+  /* Tablet portrait & landscape phone (≤900px): scale hero, stop subtitle
+     overflowing as one unbreakable line. */
+  @media (max-width: 900px) {
+    .publication-title { width: auto; left: auto; transform: none; }
+    .publication-title .title-sub { white-space: normal; }
+    .publication-authors { font-size: 1.1rem; }
+    .publication-links .button { min-width: 0; }
+    .results-wrap { padding-left: 14px; padding-right: 14px; padding-bottom: 60px; }
+    /* TL;DR card padding eased */
+    .tldr-card { padding: 1.25rem 1.25rem; }
+    .tldr-text { font-size: 1rem; }
+    /* baselines collapse from 4-col to 2-col */
+    .gallery-baselines.cols-4 { grid-template-columns: repeat(2, 1fr); }
+    /* comparison divider gutter shrinks */
+    .cmp-grid.cols-3 { grid-template-columns: 1fr 18px 1fr 6px 1fr; }
+    /* nav links wrap snugly */
+    .jump-nav .jump-links { gap: 8px; }
+    /* hero teaser block stays inside viewport */
+    .teaser-block { width: 100%; max-width: 100%; left: auto; transform: none; margin: 1rem auto 0; }
+    /* page section vertical padding */
+    .page-section { padding: 2.25rem 1.25rem; }
+  }
+
+  /* Phone portrait (≤640px): single-column grids, tighter spacing, smaller hero */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .publication-header .hero-body { padding: 2.25rem 1rem 1.25rem; }
+    .publication-title .title-main { font-size: 2.6rem; -webkit-text-stroke-width: 1.2px; }
+    .publication-title .title-sub { font-size: 1.05rem; }
+    .publication-authors { font-size: 1rem; }
+    .publication-links { gap: 0.4rem; }
+    .publication-links .button { font-size: 0.9rem !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+
+    /* TL;DR */
+    .tldr-card { padding: 1rem 1.1rem; border-radius: 12px; }
+    .tldr-label { font-size: 0.85rem; }
+    .tldr-text { font-size: 0.95rem; line-height: 1.55; }
+
+    /* Overview figure & section text */
+    #overview .container { padding: 0 4px; }
+    .overview-figure { margin-bottom: 1rem; }
+    #overview .section-text { font-size: 0.95rem; }
+
+    /* Section sub paragraphs */
+    h2.section-title { font-size: 1.25rem; }
+    h2.section-title + .section-sub { font-size: 13.5px; }
+
+    /* Comparison & baseline grids: collapse to 1-2 columns */
+    .gallery-baselines.cols-4 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .gallery-baselines.cols-2 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .gallery-baselines figcaption { font-size: 12px; margin-top: 5px; }
+
+    /* Comparison cmp-grid: shrink gutters; on very narrow we keep 3 columns
+       but the videos themselves shrink — readable. The divider still spans. */
+    .cmp-grid.cols-3 { grid-template-columns: 1fr 14px 1fr 4px 1fr; }
+    .cmp-grid.cols-2 { grid-template-columns: 1fr 14px 1fr; }
+    .cmp-grid figcaption,
+    .cell figcaption,
+    .reshoot-grid figcaption { font-size: 13px; margin-top: 5px; }
+    .brand-caption { font-size: 14px; }
+
+    /* Highlight border thickness scaled */
+    .cmp-grid .media:has(video[data-method="ours"]) { border-width: 2px; box-shadow: 0 0 0 1px rgba(34,197,94,0.4); }
+    .cmp-grid .media:has(video[data-method="tc"]),
+    .cmp-grid .media:has(video[data-method="vc"]),
+    .cmp-grid .media:has(video[data-method="wf"]),
+    .cmp-grid .media:has(video[data-method="rcm"]),
+    .cmp-grid .media:has(video[data-method="das"]),
+    .cmp-grid .media:has(video[data-method="ab-v3"]),
+    .cmp-grid .media:has(video[data-method="ab-v1"]),
+    .cmp-grid .media:has(video[data-method="ab-v0"]) { border-width: 2px; box-shadow: 0 0 0 1px rgba(239,68,68,0.4); }
+
+    /* Reshoot & gallery already collapse via earlier rules; tighten */
+    .reshoot-pair { gap: 18px; }
+    .reshoot-grid figcaption { font-size: 13px; margin-top: 5px; }
+    .reshoot-grid .media:has(video[data-method="ours"]) { border-width: 2px; }
+
+    /* Carousel arrows smaller, dots more compact */
+    .cmp-arrow { width: 36px; height: 36px; top: calc(50% - 16px); }
+    .cmp-arrow svg { width: 18px; height: 18px; }
+    .cmp-arrow-prev { left: 6px; } .cmp-arrow-next { right: 6px; }
+
+    /* Thumbnail rail: smaller thumbs */
+    .cmp-thumb { width: 92px; height: 52px; }
+
+    /* Theme switch slightly smaller */
+    .theme-toggle-track { width: 54px; height: 28px; padding: 0 6px; }
+    .theme-toggle-knob { width: 22px; height: 22px; }
+    :root[data-theme="dark"] .theme-toggle-knob { --knob-x: 26px; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle-knob { --knob-x: 26px; }
+    }
+
+    /* Scroll-to-top button */
+    .scroll-to-top { width: 38px; height: 38px; bottom: 1rem; right: 1rem; }
+
+    /* Section padding */
+    .page-section { padding: 1.75rem 1rem; }
+    .results-wrap { padding-bottom: 40px; }
+  }
+
+  /* Very narrow (≤420px): everything stacks; hero compact */
+  @media (max-width: 420px) {
+    .publication-title .title-main { font-size: 2.1rem; -webkit-text-stroke-width: 1px; }
+    .publication-title .title-sub { font-size: 0.95rem; }
+    .publication-authors { font-size: 0.92rem; }
+    .publication-links .button { font-size: 0.82rem !important; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+    /* baselines stack to 1-col on tiny screens */
+    .gallery-baselines.cols-4, .gallery-baselines.cols-2 { grid-template-columns: 1fr; }
+    /* compare grid still 3-col but tightest */
+    .cmp-grid.cols-3 { grid-template-columns: 1fr 8px 1fr 3px 1fr; }
+    .cmp-grid.cols-2 { grid-template-columns: 1fr 10px 1fr; }
+    .cmp-grid figcaption,
+    .cell figcaption,
+    .reshoot-grid figcaption { font-size: 11.5px; }
+    .brand-caption { font-size: 12.5px; }
+    .cmp-thumb { width: 78px; height: 44px; }
+    h2.section-title { font-size: 1.1rem; }
   }
 </style>
 </head>
@@ -930,7 +1166,7 @@
 <div class="cmp-carousel gallery-carousel" data-section="gallery-object"><div class="cmp-track"><div class="cmp-rail"><div class="cmp-slide" data-stem="00046__objm-o4-TfRf__s42__mha9a2bf9f_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.jpg" alt="source image for 00046__objm-o4-TfRf__s42__mha9a2bf9f_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00015__objm-o0-TfRf__s42__mh1e3c323f_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00015__objm-o0-TfRf__s42__mh1e3c323f_01.jpg" alt="source image for 00015__objm-o0-TfRf__s42__mh1e3c323f_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00015__objm-o0-TfRf__s42__mh1e3c323f_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00015__objm-o0-TfRf__s42__mh1e3c323f_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.jpg" alt="source image for 00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00017__objm-o0-Rf__s42__mhfb5a39f8_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00017__objm-o0-Rf__s42__mhfb5a39f8_01.jpg" alt="source image for 00017__objm-o0-Rf__s42__mhfb5a39f8_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00017__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00017__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00021__objm-o2-TfRf__s42__mh598dc568_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00021__objm-o2-TfRf__s42__mh598dc568_01.jpg" alt="source image for 00021__objm-o2-TfRf__s42__mh598dc568_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00021__objm-o2-TfRf__s42__mh598dc568_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00021__objm-o2-TfRf__s42__mh598dc568_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00036__objm-o1-TfRf__s42__mh93ea2e2d_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.jpg" alt="source image for 00036__objm-o1-TfRf__s42__mh93ea2e2d_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00055__objm-o1-TfRf__s42__mh1aa7db1b_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.jpg" alt="source image for 00055__objm-o1-TfRf__s42__mh1aa7db1b_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00070__objm-o1-TfRf__s42__mha71ab18a_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00070__objm-o1-TfRf__s42__mha71ab18a_01.jpg" alt="source image for 00070__objm-o1-TfRf__s42__mha71ab18a_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00070__objm-o1-TfRf__s42__mha71ab18a_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00070__objm-o1-TfRf__s42__mha71ab18a_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00092__objm-o0-Rf__s42__mhfb5a39f8_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00092__objm-o0-Rf__s42__mhfb5a39f8_01.jpg" alt="source image for 00092__objm-o0-Rf__s42__mhfb5a39f8_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00092__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00092__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00097__objm-o6-Tf__s42__mh7e1cf4c3_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.jpg" alt="source image for 00097__objm-o6-Tf__s42__mh7e1cf4c3_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00100__objm-o1-Tf__s42__mh27137a91_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00100__objm-o1-Tf__s42__mh27137a91_01.jpg" alt="source image for 00100__objm-o1-Tf__s42__mh27137a91_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00100__objm-o1-Tf__s42__mh27137a91_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00100__objm-o1-Tf__s42__mh27137a91_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div><div class="cmp-slide" data-stem="00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01"><div class="gallery-card"><div class="reshoot-grid gallery-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.jpg" alt="source image for 00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos_obj/ours/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div></div></div><div class="cmp-dots cmp-thumbs"><button class="cmp-dot cmp-thumb" type="button" data-idx="0" aria-label="Sample 1" style="background-image:url(&quot;assets_web/source_images_obj/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="1" aria-label="Sample 2" style="background-image:url(&quot;assets_web/source_images_obj/00015__objm-o0-TfRf__s42__mh1e3c323f_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="2" aria-label="Sample 3" style="background-image:url(&quot;assets_web/source_images_obj/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="3" aria-label="Sample 4" style="background-image:url(&quot;assets_web/source_images_obj/00017__objm-o0-Rf__s42__mhfb5a39f8_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="4" aria-label="Sample 5" style="background-image:url(&quot;assets_web/source_images_obj/00021__objm-o2-TfRf__s42__mh598dc568_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="5" aria-label="Sample 6" style="background-image:url(&quot;assets_web/source_images_obj/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="6" aria-label="Sample 7" style="background-image:url(&quot;assets_web/source_images_obj/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="7" aria-label="Sample 8" style="background-image:url(&quot;assets_web/source_images_obj/00070__objm-o1-TfRf__s42__mha71ab18a_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="8" aria-label="Sample 9" style="background-image:url(&quot;assets_web/source_images_obj/00092__objm-o0-Rf__s42__mhfb5a39f8_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="9" aria-label="Sample 10" style="background-image:url(&quot;assets_web/source_images_obj/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="10" aria-label="Sample 11" style="background-image:url(&quot;assets_web/source_images_obj/00100__objm-o1-Tf__s42__mh27137a91_01.jpg&quot;)"></button><button class="cmp-dot cmp-thumb" type="button" data-idx="11" aria-label="Sample 12" style="background-image:url(&quot;assets_web/source_images_obj/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.jpg&quot;)"></button></div><button class="baseline-toggle" type="button" aria-expanded="false" aria-label="Toggle baseline comparisons"><span class="baseline-hint">Expand Baseline Comparisons</span><span class="icon"><svg viewBox="0 0 28 16" aria-hidden="true"><defs><linearGradient id="blgrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7aa7ff"/><stop offset="1" stop-color="#d7a5dd"/></linearGradient></defs><path class="bl-chevron" d="M2 3 L14 13 L26 3" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="gallery-baseline-stage is-collapsed"><div class="gb-group" data-idx="0"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00046__objm-o4-TfRf__s42__mha9a2bf9f_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="1"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00015__objm-o0-TfRf__s42__mh1e3c323f_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00015__objm-o0-TfRf__s42__mh1e3c323f_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="2"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00079__objm-o3-TfRf__o4-Rf__s42__mhec27494b_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="3"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00017__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00017__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="4"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00021__objm-o2-TfRf__s42__mh598dc568_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00021__objm-o2-TfRf__s42__mh598dc568_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="5"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="6"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00055__objm-o1-TfRf__s42__mh1aa7db1b_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="7"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00070__objm-o1-TfRf__s42__mha71ab18a_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00070__objm-o1-TfRf__s42__mha71ab18a_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="8"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00092__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00092__objm-o0-Rf__s42__mhfb5a39f8_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="9"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00097__objm-o6-Tf__s42__mh7e1cf4c3_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="10"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00100__objm-o1-Tf__s42__mh27137a91_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00100__objm-o1-Tf__s42__mh27137a91_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div><div class="gb-group" data-idx="11"><div class="gallery-baselines cols-2"><figure class="cell"><div class="media"><video data-method="das" src="assets/videos_obj/das/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.mp4" muted playsinline preload="none"></video></div><figcaption>DaS</figcaption></figure><figure class="cell"><div class="media"><video data-method="vc" src="assets/videos_obj/vc/00112__objm-o0-Tf__o2-Tf__s42__mh30ef12d9_01.mp4" muted playsinline preload="none"></video></div><figcaption>ViewCrafter</figcaption></figure></div></div></div></div>
 <h2 class="section-title" id="sec-3d-guidance" style="margin:32px 0 6px;">3D Guidance + Text Editing</h2>
 <p class="section-sub">While adding 3D control, <span class="brand">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span> retains the strong pretrained text-prompt ability to describe additional visual effects; together they enable complex, controllable video generation.</p>
-<div class="reshoot-pair"><div class="reshoot-item" data-stem="00039__cam-arc54.2-d180"><p class="prompt" style="text-align:center; font-style:italic; color:var(--fg); margin:0 0 14px; font-size:21px; font-weight:500;">&ldquo;The white horse in the middle lifts its head.&rdquo;</p><div class="reshoot-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images/00039__cam-arc54.2-d180.jpg" alt="source image for 00039__cam-arc54.2-d180" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00039__cam-arc54.2-d180.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos/ours/00039__cam-arc54.2-d180.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div><div class="reshoot-item" data-stem="00080__cam-arc41.5-d0"><p class="prompt" style="text-align:center; font-style:italic; color:var(--fg); margin:0 0 14px; font-size:21px; font-weight:500;">&ldquo;Spaceship hit, billowing smoke.&rdquo;</p><div class="reshoot-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images/00080__cam-arc41.5-d0.jpg" alt="source image for 00080__cam-arc41.5-d0" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00080__cam-arc41.5-d0.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos/ours/00080__cam-arc41.5-d0.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div>
+<div class="reshoot-carousel"><div class="reshoot-pair"><div class="reshoot-item" data-stem="00039__cam-arc54.2-d180"><p class="prompt" style="text-align:center; font-style:italic; color:var(--fg); margin:0 0 14px; font-size:21px; font-weight:500;">&ldquo;The white horse in the middle lifts its head.&rdquo;</p><div class="reshoot-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images/00039__cam-arc54.2-d180.jpg" alt="source image for 00039__cam-arc54.2-d180" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00039__cam-arc54.2-d180.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos/ours/00039__cam-arc54.2-d180.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div><div class="reshoot-item" data-stem="00080__cam-arc41.5-d0"><p class="prompt" style="text-align:center; font-style:italic; color:var(--fg); margin:0 0 14px; font-size:21px; font-weight:500;">&ldquo;Spaceship hit, billowing smoke.&rdquo;</p><div class="reshoot-grid"><figure class="cell"><div class="media"><img src="assets_web/source_images/00080__cam-arc41.5-d0.jpg" alt="source image for 00080__cam-arc41.5-d0" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media"><video data-method="normal" src="assets/normal/00080__cam-arc41.5-d0.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><div class="reshoot-ours"><figure class="cell"><div class="media"><video data-method="ours" src="assets_web/videos/ours/00080__cam-arc41.5-d0.mp4" muted playsinline preload="none"></video></div><figcaption><span class="brand brand-caption">Real<span class="digit">2</span>SAM<span class="digit">2</span>Real</span></figcaption></figure></div></div></div></div></div>
 <h2 class="section-title" id="sec-motion-transfer" style="margin:32px 0 6px;">Motion Transfer</h2>
 <p class="section-sub">Motion from a source scene is transferred to target images while preserving appearance and layout.</p>
 <section class="sample" data-stem="00036__objm-o1-TfRf__s42__mh93ea2e2d_01-motion-transfer" id="00036__objm-o1-TfRf__s42__mh93ea2e2d_01-mt"><div class="grid" style="grid-template-columns: repeat(3, 1fr); row-gap: 8px;"><figure class="cell"><div class="media"><img src="assets_web/source_images_obj/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.jpg" alt="motion transfer source 1" loading="lazy"></div><figcaption>Source Image</figcaption></figure><figure class="cell"><div class="media mt-t1"><img src="assets_web/source_images_obj/00036__objm-o1-TfRf__s42__mh93ea2e2d_01_mt2.jpg" alt="motion transfer source 2" loading="lazy"></div><figcaption>Target Image 1</figcaption></figure><figure class="cell"><div class="media mt-t2"><img src="assets_web/source_images_obj/00036__objm-o1-TfRf__s42__mh93ea2e2d_01_mt3.jpg" alt="motion transfer source 3" loading="lazy"></div><figcaption>Target Image 2</figcaption></figure><figure class="cell"><div class="media"><video data-method="mt" src="assets/normal/00036__objm-o1-TfRf__s42__mh93ea2e2d_01.mp4" muted playsinline preload="none"></video></div><figcaption>Coarse Generative Geometry</figcaption></figure><figure class="cell"><div class="media mt-t1"><video data-method="mt" src="assets_web/videos_obj/ours/00036__objm-o1-TfRf__s42__mh93ea2e2d_01_mt2.mp4" muted playsinline preload="none"></video></div><figcaption>Target Video 1</figcaption></figure><figure class="cell"><div class="media mt-t2"><video data-method="mt" src="assets_web/videos_obj/ours/00036__objm-o1-TfRf__s42__mh93ea2e2d_01_mt3.mp4" muted playsinline preload="none"></video></div><figcaption>Target Video 2</figcaption></figure></div></section>
@@ -1018,8 +1254,10 @@
       // How far the rail moves per index, as a % of the track width. Normal
       // carousels move a full slide (100%); the gallery shows cards that peek
       // the neighbours and advances by one card width (read from CSS var).
-      const STEP_PCT = parseFloat(getComputedStyle(carousel).getPropertyValue('--cmp-step')) || 100;
-      const CENTER_PCT = (100 - STEP_PCT) / 2;   // keeps the active card centered with symmetric peeks
+      // Read live each time so that media-query changes to --cmp-step (e.g.
+      // wide → narrow) take effect on the very next setRail/centerThumb.
+      const stepPct = () => parseFloat(getComputedStyle(carousel).getPropertyValue('--cmp-step')) || 100;
+      const centerPct = () => (100 - stepPct()) / 2;
 
       let index = 0;
       let inView = false;
@@ -1243,7 +1481,7 @@
 
       function setRail(pos, animate) {
         rail.style.transition = animate ? '' : 'none';
-        rail.style.transform = `translate3d(calc(${CENTER_PCT}% - ${pos * STEP_PCT}%), 0, 0)`;  // 3d = GPU compositing
+        rail.style.transform = `translate3d(calc(${centerPct()}% - ${pos * stepPct()}%), 0, 0)`;  // 3d = GPU compositing
         railPos = pos;
         if (!animate) { rail.getBoundingClientRect(); rail.style.transition = ''; }
       }
@@ -1325,15 +1563,88 @@
       // Activate the first slide immediately (paused until in view).
       play(0);
       carousel._firstVideos = videosOf(0);
-      // Re-center the thumbnail rail after layout / on resize.
-      if (thumbRail) {
-        requestAnimationFrame(() => centerThumb(index));
-        window.addEventListener('resize', () => centerThumb(index), { passive: true });
-      }
+      // On resize, --cmp-step changes between 56 (wide) and 90 (narrow). Re-snap
+      // the rail to the current index so the active card stays centered, and
+      // re-center the thumbnail rail too.
+      const onResize = () => {
+        if (!sliding) setRail(railUnit(index), false);
+        if (thumbRail) centerThumb(index);
+      };
+      requestAnimationFrame(() => { if (thumbRail) centerThumb(index); });
+      window.addEventListener('resize', onResize, { passive: true });
     }
 
     const carousels = Array.from(document.querySelectorAll('.cmp-carousel'));
     carousels.forEach(setupCarousel);
+
+    // ===== Narrow-screen scroll-snap carousel for the 3D Guidance reshoot pair.
+    // Adds the same prev/next arrows + dot indicator used by the other
+    // galleries. Buttons drive native scroll on .reshoot-pair; an
+    // IntersectionObserver keeps the active dot in sync with whatever the user
+    // swiped to. The whole thing is hidden on wider screens via CSS. =====
+    document.querySelectorAll('.reshoot-carousel').forEach(carousel => {
+      const pair = carousel.querySelector('.reshoot-pair');
+      const items = Array.from(carousel.querySelectorAll('.reshoot-item'));
+      if (!pair || items.length < 2) return;
+
+      // Arrows flank the slide (absolute-positioned via .cmp-arrow-prev/next),
+      // matching the rest of the site's carousels. Dots live in a centered
+      // row below the slide.
+      const grad = '<defs><linearGradient id="cmparrowgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7aa7ff"/><stop offset="1" stop-color="#d7a5dd"/></linearGradient></defs>';
+      const prev = document.createElement('button');
+      const next = document.createElement('button');
+      prev.type = next.type = 'button';
+      prev.className = 'cmp-arrow cmp-arrow-prev';
+      next.className = 'cmp-arrow cmp-arrow-next';
+      prev.setAttribute('aria-label', 'Previous sample');
+      next.setAttribute('aria-label', 'Next sample');
+      prev.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + grad + '<path class="cmp-arrow-path" d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      next.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + grad + '<path class="cmp-arrow-path" d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      carousel.appendChild(prev);
+      carousel.appendChild(next);
+
+      const nav = document.createElement('div');
+      nav.className = 'reshoot-nav';
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'reshoot-dots';
+      const dots = items.map((_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cmp-dot';
+        b.setAttribute('aria-label', 'Go to sample ' + (i + 1));
+        dotsWrap.appendChild(b);
+        return b;
+      });
+      nav.appendChild(dotsWrap);
+      carousel.appendChild(nav);
+
+      let active = 0;
+      const setActive = (i) => {
+        active = i;
+        dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+      };
+      setActive(0);
+
+      const scrollTo = (i) => {
+        const t = items[Math.max(0, Math.min(items.length - 1, i))];
+        if (!t) return;
+        pair.scrollTo({ left: t.offsetLeft - pair.offsetLeft, behavior: 'smooth' });
+      };
+      prev.addEventListener('click', () => scrollTo(active - 1));
+      next.addEventListener('click', () => scrollTo(active + 1));
+      dots.forEach((d, k) => d.addEventListener('click', () => scrollTo(k)));
+
+      // Sync active dot with whatever the user actually scrolled to.
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+            const idx = items.indexOf(e.target);
+            if (idx !== -1) setActive(idx);
+          }
+        });
+      }, { root: pair, threshold: [0.6] });
+      items.forEach(it => io.observe(it));
+    });
 
     // ===== Remaining single-row samples (3D Guidance / Motion Transfer / Ablation) =====
     function setupSample(sample) {
@@ -1418,6 +1729,11 @@
           currentLink = entries[entries.length - 1].link;
         }
         navLinks.forEach(a => a.classList.toggle('is-current', a === currentLink));
+        // On the narrow-screen bottom dock the active link can be off-screen
+        // inside the horizontal scroller — pan it back into view.
+        if (currentLink && matchMedia('(max-width: 768px)').matches) {
+          currentLink.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+        }
       }
       window.addEventListener('scroll', () => {
         if (raf === null) raf = requestAnimationFrame(updateSpy);
@@ -1426,26 +1742,76 @@
       updateSpy();
     }
 
-    // Progressively fade the nav's glass background in as it nears the top,
-    // instead of snapping on the moment it touches the top edge.
-    const navEl = document.querySelector('.jump-nav');
-    const sentinel = document.getElementById('nav-sentinel');
-    if (navEl && sentinel) {
-      const FADE_OVER = 160; // px of travel before the top over which the glass ramps in
-      let navRaf = null;
-      function updateNavGlass() {
-        navRaf = null;
-        // Distance from the sentinel (just above the nav) to the viewport top.
-        const d = -sentinel.getBoundingClientRect().top;
-        let p = d / FADE_OVER;
-        p = p < 0 ? 0 : p > 1 ? 1 : p;
-        navEl.style.setProperty('--nav-glass', p.toFixed(3));
+    // Dock scroll-hint: a continuous, slow drift that bounces off the rail's
+    // edges. Starts on first load and again after long idle stretches. Stops
+    // instantly the moment the user touches the page, and stays off until the
+    // next idle window. Direction is randomized at start; on edge contact it
+    // reverses.
+    {
+      const rail = document.querySelector('.jump-nav .jump-links');
+      if (rail) {
+        const PX_PER_SEC = 28;      // drift speed — slow, screensaver-like
+        const EDGE_TOL = 1;
+        const IDLE_MS = 30_000;
+        let raf = null, lastT = null, dir = 1, idleTimer = null;
+        // Local float accumulator — `scrollLeft` getter rounds to int in some
+        // browsers, so a slow speed (~0.4 px/frame) would stick on the same
+        // integer for several frames and look like jitter. Tracking pos as a
+        // float and writing it each frame keeps the motion smooth.
+        let pos = 0;
+        const overflows = () => rail.scrollWidth - rail.clientWidth > EDGE_TOL;
+        const stop = () => {
+          if (raf != null) cancelAnimationFrame(raf);
+          raf = null; lastT = null;
+        };
+        const tick = (now) => {
+          if (lastT == null) lastT = now;
+          const dt = Math.min(0.05, (now - lastT) / 1000);  // clamp big gaps
+          lastT = now;
+          if (!overflows()) { raf = null; return; }
+          const max = rail.scrollWidth - rail.clientWidth;
+          pos += dir * PX_PER_SEC * dt;
+          if (pos <= 0) { pos = 0; dir = +1; }
+          else if (pos >= max) { pos = max; dir = -1; }
+          rail.scrollLeft = pos;
+          raf = requestAnimationFrame(tick);
+        };
+        const start = () => {
+          if (raf != null || !overflows()) return;
+          pos = rail.scrollLeft;            // re-sync from current native position
+          const max = rail.scrollWidth - rail.clientWidth;
+          if (pos <= EDGE_TOL) dir = +1;
+          else if (pos >= max - EDGE_TOL) dir = -1;
+          else dir = Math.random() < 0.5 ? -1 : +1;
+          raf = requestAnimationFrame(tick);
+        };
+        const armIdle = () => {
+          clearTimeout(idleTimer);
+          idleTimer = setTimeout(start, IDLE_MS);
+        };
+        // Cancel only when the user is *actually* scrolling the dock. Naive
+        // pointerdown / touchstart triggers were too eager — on the bottom
+        // dock especially, fingers naturally land on it while the user just
+        // wants to scroll the page. Instead, stop only when:
+        //   • the dock's own scrollLeft actually changes by user input
+        //     (compare against our internal `pos` to filter out our own
+        //     drift writes), or
+        //   • a click/tap actually completes on a link (link nav cancels).
+        rail.addEventListener('click', () => { stop(); armIdle(); }, { passive: true });
+        rail.addEventListener('scroll', () => {
+          // We write rail.scrollLeft = pos every frame; if it differs by more
+          // than a pixel, something else (touch drag, wheel deltaX, keyboard)
+          // moved it.
+          if (Math.abs(rail.scrollLeft - pos) > 1) { stop(); armIdle(); }
+        }, { passive: true });
+        // Page-level activity just resets the 30s idle clock so we don't
+        // re-start a drift while the user is busy reading.
+        ['mousemove', 'keydown', 'scroll', 'click'].forEach(ev =>
+          window.addEventListener(ev, armIdle, { passive: true }));
+        // First-load drift: delay a beat so layout settles.
+        setTimeout(start, 1500);
+        armIdle();
       }
-      window.addEventListener('scroll', () => {
-        if (navRaf === null) navRaf = requestAnimationFrame(updateNavGlass);
-      }, { passive: true });
-      window.addEventListener('resize', updateNavGlass, { passive: true });
-      updateNavGlass();
     }
 
     // Teaser: fade volume in on hover, mute on leave. (autoplay/loop/controls are HTML attrs)
