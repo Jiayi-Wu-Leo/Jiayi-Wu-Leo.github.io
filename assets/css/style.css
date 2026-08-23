@@ -1951,7 +1951,7 @@ main {
 .project-card::before {
   content: "";
   position: absolute;
-  inset: 1px;
+  inset: 0;
   border-radius: inherit;
   background: linear-gradient(135deg, var(--glass-highlight), transparent 52%);
   z-index: -1;
