@@ -1135,8 +1135,7 @@
     .gallery-baselines.cols-2 { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .gallery-baselines figcaption { font-size: 12px; margin-top: 5px; }
 
-    /* Two readable columns beat three postage-stamp videos on a phone. Reset
-       the desktop's explicit cell placement and decorative divider. */
+    /* Two readable columns beat three postage-stamp videos on a phone. */
     .cmp-grid.cols-3,
     .cmp-grid.cols-2,
     .cmp-grid.abl.cols-3 {
@@ -1151,6 +1150,21 @@
       grid-column: auto;
       grid-row: auto;
     }
+    /* Transpose non-ablation six-cell comparisons from the desktop's 3 × 2
+       matrix into a 2 × 3 portrait matrix. This keeps each desktop column
+       together: 1 2 3 / 4 5 6 becomes 1 4 / 2 5 / 3 6. */
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(1),
+    .sample .grid .cell:nth-child(1) { grid-column: 1; grid-row: 1; }
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(2),
+    .sample .grid .cell:nth-child(2) { grid-column: 1; grid-row: 2; }
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(3),
+    .sample .grid .cell:nth-child(3) { grid-column: 1; grid-row: 3; }
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(4),
+    .sample .grid .cell:nth-child(4) { grid-column: 2; grid-row: 1; }
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(5),
+    .sample .grid .cell:nth-child(5) { grid-column: 2; grid-row: 2; }
+    .cmp-grid.cols-3:not(.abl) .cell:nth-child(6),
+    .sample .grid .cell:nth-child(6) { grid-column: 2; grid-row: 3; }
     .cmp-grid::before { display: none; }
     .sample .grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 9px !important; }
     .cmp-grid figcaption,
