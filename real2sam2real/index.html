@@ -1398,8 +1398,16 @@
     // of an inline background-image URL, so the browser doesn't fetch all ~63
     // thumbs at first paint. We set the URL when each thumb (or its clone)
     // enters the viewport.
+    // These two stems share an iPhone Display-P3 JPEG whose 960px derivative
+    // decodes as black. Keep the valid original for mobile until the asset can
+    // be re-encoded with a decoder that preserves its pixels.
+    const MOBILE_ORIGINAL_IMAGE_FALLBACKS = new Set([
+      'assets_web/source_images/00000__cam-arc46.3-d0.jpg',
+      'assets_web/source_images/99999__cam-arc74.8-d154.3.jpg'
+    ]);
     const responsiveImageSrc = (src) => {
       if (!IS_MOBILE || !src) return src;
+      if (MOBILE_ORIGINAL_IMAGE_FALLBACKS.has(src)) return src;
       if (/^assets_web\/(source_images|source_images_obj)\//.test(src) ||
           /^assets_web\/ablation\/[^/]+_source_image\.jpg$/.test(src)) {
         return src.replace(/^assets_web\//, 'assets_web/mobile/');
