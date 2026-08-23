@@ -4,8 +4,14 @@
 // theme preference
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const themeToggleText = document.querySelector("[data-theme-toggle-text]");
+const themeToggleIcon = themeToggle?.querySelector("ion-icon");
 const colorSchemeQuery = window.matchMedia("(prefers-color-scheme: light)");
-const themeModes = ["light", "dark"];
+const themeModes = ["system", "light", "dark"];
+const themeIcons = {
+  system: "contrast-outline",
+  light: "sunny-outline",
+  dark: "moon-outline"
+};
 
 const getStoredThemeMode = function () {
   const storedMode = localStorage.getItem("theme-mode");
@@ -13,20 +19,32 @@ const getStoredThemeMode = function () {
   if (storedMode) localStorage.removeItem("theme-mode");
 
   const legacyTheme = localStorage.getItem("theme");
-  return themeModes.includes(legacyTheme) ? legacyTheme : (colorSchemeQuery.matches ? "light" : "dark");
+  if (["light", "dark"].includes(legacyTheme)) return legacyTheme;
+  if (legacyTheme) localStorage.removeItem("theme");
+
+  return "system";
 };
 
 let themeMode = getStoredThemeMode();
 
 const getResolvedTheme = function () {
-  return themeMode;
+  return themeMode === "system" ? (colorSchemeQuery.matches ? "light" : "dark") : themeMode;
 };
 
 const updateThemeToggle = function () {
   if (!themeToggle || !themeToggleText) return;
 
-  themeToggleText.textContent = `${themeMode.charAt(0).toUpperCase()}${themeMode.slice(1)} mode`;
-  themeToggle.setAttribute("aria-label", `Switch color theme. Current mode: ${themeToggleText.textContent}`);
+  const resolvedTheme = getResolvedTheme();
+  const currentModeLabel = themeMode === "system"
+    ? `System mode, using ${resolvedTheme} theme`
+    : `${themeMode.charAt(0).toUpperCase()}${themeMode.slice(1)} mode`;
+  const nextMode = themeModes[(themeModes.indexOf(themeMode) + 1) % themeModes.length];
+
+  themeToggleText.textContent = currentModeLabel;
+  themeToggle.dataset.themeMode = themeMode;
+  themeToggle.setAttribute("aria-label", `Color theme: ${currentModeLabel}. Switch to ${nextMode} mode.`);
+  themeToggle.setAttribute("title", `Theme: ${currentModeLabel}. Next: ${nextMode}.`);
+  if (themeToggleIcon) themeToggleIcon.setAttribute("name", themeIcons[themeMode]);
 };
 
 const applyTheme = function () {
@@ -37,17 +55,18 @@ const applyTheme = function () {
 if (themeToggle) {
   themeToggle.addEventListener("click", function () {
     themeMode = themeModes[(themeModes.indexOf(themeMode) + 1) % themeModes.length];
-    localStorage.setItem("theme-mode", themeMode);
+    if (themeMode === "system") {
+      localStorage.removeItem("theme-mode");
+    } else {
+      localStorage.setItem("theme-mode", themeMode);
+    }
     localStorage.removeItem("theme");
     applyTheme();
   });
 }
 
 colorSchemeQuery.addEventListener("change", function () {
-  if (!localStorage.getItem("theme-mode") && !localStorage.getItem("theme")) {
-    themeMode = colorSchemeQuery.matches ? "light" : "dark";
-    applyTheme();
-  }
+  if (themeMode === "system") applyTheme();
 });
 
 applyTheme();
