@@ -1300,7 +1300,7 @@ main {
 .service-item::before {
   content: "";
   position: absolute;
-  inset: 1px;
+  inset: 0;
   background: linear-gradient(135deg, var(--glass-highlight), transparent 58%);
   border-radius: inherit;
   z-index: -1;
