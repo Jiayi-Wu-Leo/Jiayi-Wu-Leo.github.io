@@ -1,0 +1,14 @@
+/* Keep the desktop reading layout; use two disclosures on compact screens. */
+.citation-details > summary { list-style: none; cursor: default; }
+.citation-details > summary::-webkit-details-marker { display: none; }
+.citation-disclosure-icon { display: none; }
+
+@media (max-width: 640px), (max-width: 980px) and (pointer: coarse) {
+  .abstract > .overview-detail { padding-bottom: 0; }
+  .citation-details > summary { cursor: pointer; gap: 16px; }
+  .citation-bar > .citation-toggle-label { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-control); color: var(--ink); }
+  .citation-disclosure-icon { display: inline-block; color: var(--muted); font-size: 20px; line-height: 1; }
+  .citation-details[open] .citation-disclosure-icon { transform: rotate(45deg); }
+  .citation-details:not([open]) > summary { border-bottom-color: transparent; }
+  #copy-citation { min-height: 44px; }
+}

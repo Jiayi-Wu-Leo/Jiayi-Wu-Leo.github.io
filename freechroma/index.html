@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f2f6f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#101b1e" media="(prefers-color-scheme: dark)">
+  <script>
+    (() => {
+      let mode = "auto";
+      try {
+        const saved = localStorage.getItem("freechroma-theme");
+        if (["auto", "light", "dark"].includes(saved)) mode = saved;
+      } catch {}
+      const theme = mode === "auto"
+        ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        : mode;
+      document.documentElement.dataset.themeMode = mode;
+      document.documentElement.dataset.theme = theme;
+      document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
+        meta.content = theme === "dark" ? "#101b1e" : "#f2f6f7";
+      });
+    })();
+  </script>
+  <meta name="description" content="FreeCHROMA adapts a pretrained video diffusion model for generative video compositing from one to three unaligned background references.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FreeCHROMA: Generative Chroma Keying from Unaligned Background References">
+  <meta property="og:description" content="FreeCHROMA adapts a pretrained video diffusion model for generative video compositing from one to three unaligned background references.">
+  <meta property="og:image" content="https://jiayi-wu-leo.github.io/freechroma/assets/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>FreeCHROMA: Generative Chroma Keying from Unaligned Background References</title>
+  <link rel="icon" href="assets/freechroma-icon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/freechroma-icon.svg" type="image/svg+xml" sizes="any">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/mobile-reading.css">
+  <script src="assets/config.js" defer></script>
+  <script src="assets/content.js" defer></script>
+  <script src="assets/main.js" defer></script>
+  <script src="assets/mobile-reading.js" defer></script>
+  <link rel="canonical" href="https://jiayi-wu-leo.github.io/freechroma/">
+  <meta property="og:url" content="https://jiayi-wu-leo.github.io/freechroma/">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-wrap" id="navigation-dock">
+      <a class="brand" href="#top" aria-label="FreeCHROMA home">
+        <img class="brand-symbol" src="assets/freechroma-icon.svg" width="52" height="39" alt="" aria-hidden="true" decoding="async">
+        <span>Free<span class="brand-accent">CHROMA</span></span>
+      </a>
+      <nav id="navigation" aria-label="Main navigation">
+        <a class="nav-home" href="#top" title="Home"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span class="nav-label">Home</span></a>
+        <a class="nav-overview" href="#overview"><span class="nav-label">Overview</span></a>
+        <a href="#results" title="Video comparisons"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M12 5v14M6 12h3m6 0h3"/></svg><span class="nav-label">Results</span></a>
+        <a href="#method" title="Method"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span class="nav-label">Method</span></a>
+        <a href="#robotics" title="Robotics applications"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="13" rx="3"/><path d="M12 3v4M2 11v5m20-5v5M9 16h6"/><circle cx="9" cy="11" r=".8"/><circle cx="15" cy="11" r=".8"/></svg><span class="nav-label">Robotics</span></a>
+        <a href="#citation" title="Citation"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H4v8h6V5Zm0 8c0 4-2 6-5 6M20 5h-6v8h6V5Zm0 8c0 4-2 6-5 6"/></svg><span class="nav-label">Citation</span></a>
+      </nav>
+      <div class="theme-picker" id="theme-picker">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Color theme: Auto (follow system). Switch to Light." title="Color theme: Auto (follow system). Switch to Light.">
+          <svg data-theme-icon="auto" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8m-4-4v4"/></svg>
+          <svg data-theme-icon="light" viewBox="0 0 24 24" fill="none" aria-hidden="true" hidden><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+          <svg data-theme-icon="dark" viewBox="0 0 24 24" fill="none" aria-hidden="true" hidden><path d="M20.7 14.1A9 9 0 0 1 9.9 3.3a9 9 0 1 0 10.8 10.8Z"/></svg>
+        </button>
+      </div>
+      <button class="menu-button" id="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation" aria-label="Open navigation">
+        <span></span><span></span>
+      </button>
+    </div>
+    <button class="dock-peek" id="dock-peek" type="button" aria-controls="navigation-dock" aria-expanded="true" aria-label="Show page navigation" title="Show page navigation" aria-hidden="true" inert>
+      <svg class="dock-peek-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="m7 3-3 3 3 3"/></svg>
+      <svg class="dock-peek-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="3.5" cy="6" r=".7"/><circle cx="3.5" cy="12" r=".7"/><circle cx="3.5" cy="18" r=".7"/></svg>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="hero section-width" id="top" aria-labelledby="paper-title">
+      <div class="hero-heading">
+        <h1 id="paper-title"><span class="title-wordmark">Free<span>CHROMA</span></span><span class="paper-subtitle">Generative Chroma Keying<br>from Unaligned Background References</span></h1>
+        <div class="authors" aria-label="Authors">
+          <span>Jiayi Wu<sup>1</sup></span>
+          <span>Tianfu Wang<sup>1</sup></span>
+          <span>Rui Zhao<sup>2</sup></span>
+          <span>Florian Schiffers<sup>2</sup></span>
+          <span>Zhimin Chen<sup>2</sup></span>
+          <span>Cornelia Fermuller<sup>1</sup></span>
+          <span>Yezhou Yang<sup>3</sup></span>
+          <span>Christopher Metzler<sup>1</sup></span>
+          <span>Yiannis Aloimonos<sup>1</sup></span>
+        </div>
+        <p class="affiliations"><span><sup>1</sup> University of Maryland, College Park</span><span><sup>2</sup> Amazon<sup>†</sup></span><span><sup>3</sup> Arizona State University</span></p>
+        <p class="affiliation-note"><sup>†</sup> This work is unrelated to the authors’ positions at Amazon.</p>
+        <div class="resource-links">
+          <a class="button" data-resource="paper" href="https://arxiv.org/abs/2610.14445" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 2h7l4 4v12H5V2Z M12 2v5h4 M8 11h5 M8 14h5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg> Paper</a>
+          <a class="button" data-resource="code" hidden><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m6 5-5 5 5 5m8-10 5 5-5 5M12 3 8 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Code</a>
+          <a class="button" data-resource="model" hidden><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m10 2 7 4v8l-7 4-7-4V6l7-4Z M3 6l7 4 7-4 M10 10v8" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg> Model</a>
+          <a class="button" href="#citation"><span class="citation-icon" aria-hidden="true">{ }</span> BibTeX</a>
+        </div>
+      </div>
+
+      <div class="hero-showcase">
+        <h2 class="sr-only" id="hero-scene-title">Sample 13</h2>
+        <div class="hero-viewport">
+          <div class="hero-stage video-group" id="hero-stage"></div>
+        </div>
+        <div class="hero-footer">
+          <div class="carousel-controls">
+            <button class="icon-button" id="hero-prev" type="button" aria-label="Previous featured example">←</button>
+            <span id="hero-counter" aria-live="polite">01 / 09</span>
+            <button class="icon-button" id="hero-next" type="button" aria-label="Next featured example">→</button>
+          </div>
+          <span class="hero-overlay-hint" id="hero-overlay-hint"><span aria-hidden="true">↔</span> Drag to compare<span class="sr-only"> the input foreground and generated video. Use the arrow keys to adjust.</span></span>
+        </div>
+        <input id="hero-seek" data-seek="hero-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Featured video timeline">
+      </div>
+    </section>
+
+    <section class="overview section-width section-space" id="overview" aria-labelledby="overview-title">
+      <div class="overview-heading">
+        <h2 id="overview-title">Generative<br><span class="accent-text">chroma keying</span></h2>
+      </div>
+      <div class="overview-copy">
+        <p class="lead">FreeCHROMA adapts a pretrained video diffusion model in a parameter-efficient manner for generative video compositing from one to three unaligned background references.</p>
+        <p class="overview-detail">The model integrates the foreground into the referenced environment, preserving foreground identity, motion, and fine visual details while generating a spatiotemporally coherent background.</p>
+        <p class="overview-detail">Foreground–background harmonization occurs within the same generation process, without a separate relighting stage. Optional text instructions help disambiguate complex spatial relationships and camera behavior.</p>
+        <details class="abstract" id="abstract">
+          <summary>Read the full abstract <span aria-hidden="true">+</span></summary>
+          <p id="abstract-text"></p>
+        </details>
+      </div>
+    </section>
+
+    <section class="results-section section-space" id="results" aria-labelledby="results-title">
+      <div class="section-width">
+        <div class="section-heading">
+          <h2 id="results-title">Video comparisons</h2>
+        </div>
+
+        <div class="comparison gallery-panel" id="comparison">
+          <!-- Shared selection state for thumbnail navigation and autoplay. -->
+          <select id="comparison-sample" aria-label="Comparison sample" hidden></select>
+          <span id="comparison-counter" class="sr-only" aria-live="polite"></span>
+          <p id="overlay-help" class="sr-only">Left: input foreground. Right: generated result. Drag any divider to update every method.</p>
+          <div id="comparison-stage" class="video-group"></div>
+          <div class="gallery-navigation" role="group" aria-label="Comparison samples">
+            <button type="button" class="icon-button" data-step-for="comparison-sample" data-step="-1" aria-label="Previous sample">←</button>
+            <div id="comparison-thumbnails" class="sample-strip gallery-thumbnails" role="group" aria-label="All 24 samples"></div>
+            <button type="button" class="icon-button" data-step-for="comparison-sample" data-step="1" aria-label="Next sample">→</button>
+          </div>
+          <input id="comparison-seek" data-seek="comparison-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Comparison video timeline">
+        </div>
+      </div>
+    </section>
+
+    <section class="section-width section-space" id="method" aria-labelledby="method-title">
+      <div class="section-heading method-heading">
+        <h2 id="method-title">How it works</h2>
+        <p>We build training pairs from natural videos and use them to adapt a pretrained video diffusion model for joint composition and harmonization.</p>
+      </div>
+      <div class="method-figures">
+        <article class="method-figure" id="pipeline-panel" aria-labelledby="pipeline-title">
+          <div class="method-figure-bar">
+            <h3 id="pipeline-title">Training data</h3>
+            <p>We construct pseudo-pairs from natural videos by perturbing foreground illumination and creating clean background references with altered viewpoints. The original video remains the training target.</p>
+          </div>
+          <button class="figure-zoom" type="button" data-image="assets/data-pipeline.webp" data-caption="FreeCHROMA training data pipeline" aria-label="Enlarge the training data pipeline figure"><img src="assets/data-pipeline.webp" alt="Training pipeline: curate natural videos, extract and perturb the foreground, remove foreground objects from selected background frames, change the reference viewpoint, and reconstruct the original source video." loading="lazy" decoding="async" width="2400" height="1107"></button>
+        </article>
+        <article class="method-figure" id="architecture-panel" aria-labelledby="architecture-title">
+          <div class="method-figure-bar">
+            <h3 id="architecture-title">Model</h3>
+            <p>Using these pairs, we train added conditioning layers and LoRA adapters while keeping the pretrained weights frozen. Foreground, mask, and background-reference inputs guide composition and harmonization in one denoising process.</p>
+          </div>
+          <button class="figure-zoom" type="button" data-image="assets/architecture.webp" data-caption="FreeCHROMA model architecture" aria-label="Enlarge the model architecture figure"><img src="assets/architecture.webp" alt="FreeCHROMA architecture: foreground and mask inputs enter an expanded patchify projection, background reference tokens provide persistent context, and trainable LoRA adapters guide a frozen video diffusion backbone." loading="lazy" decoding="async" width="2400" height="1367"></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-width section-space" id="ablation" aria-labelledby="ablation-title">
+      <div class="section-heading">
+        <h2 id="ablation-title">Ablation study</h2>
+      </div>
+      <div class="ablation-panel gallery-panel">
+        <select id="ablation-sample" aria-label="Ablation sample" hidden></select>
+        <span id="ablation-counter" class="sr-only" aria-live="polite"></span>
+        <div class="video-group" id="ablation-stage"></div>
+        <div class="gallery-navigation" role="group" aria-label="Ablation samples">
+          <button type="button" class="icon-button" data-step-for="ablation-sample" data-step="-1" aria-label="Previous ablation example">←</button>
+          <div id="ablation-thumbnails" class="sample-strip gallery-thumbnails" role="group" aria-label="All ablation examples"></div>
+          <button type="button" class="icon-button" data-step-for="ablation-sample" data-step="1" aria-label="Next ablation example">→</button>
+        </div>
+        <input id="ablation-seek" data-seek="ablation-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Ablation video timeline">
+        <div class="ablation-notes">
+          <p data-method="norelight"><strong>Without foreground illumination perturbation</strong>The model tends to retain the source foreground lighting and color casts.</p>
+          <p data-method="bgclean"><strong>Without background viewpoint augmentation</strong>The model tends to inherit the unaligned reference viewpoint, producing inconsistent scene geometry.</p>
+          <p data-method="ours"><strong>Full FreeCHROMA model</strong>The two augmentations support harmonization and consistent scene geometry.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="robotics-section section-space" id="robotics" aria-labelledby="robotics-title">
+      <div class="section-width">
+        <div class="section-heading">
+          <h2 id="robotics-title">Robotics applications</h2>
+        </div>
+        <div class="robot-applications">
+          <article class="robot-panel" id="robot-sim2real-panel" aria-labelledby="robot-sim2real-title">
+            <header class="robot-description">
+              <div class="robot-title"><span class="robot-index" aria-hidden="true">01</span><h3 id="robot-sim2real-title">Sim-to-real transfer</h3><span id="robot-sim2real-dataset" class="dataset-tag">RoboCasa</span></div>
+              <p id="robot-sim2real-description"></p>
+            </header>
+            <div class="robot-controls">
+              <div class="case-picker">
+                <button type="button" class="icon-button" data-step-for="robot-sim2real-sample" data-step="-1" aria-label="Previous sim-to-real environment">←</button>
+                <label class="select-field"><span id="robot-sim2real-select-label" class="sr-only">Environment</span><select id="robot-sim2real-sample" aria-label="Sim-to-real environment"></select></label>
+                <button type="button" class="icon-button" data-step-for="robot-sim2real-sample" data-step="1" aria-label="Next sim-to-real environment">→</button>
+                <span id="robot-sim2real-counter" class="case-counter" aria-live="polite"></span>
+              </div>
+              <button type="button" id="robot-sim2real-source" class="button source-video-button" hidden>Source video <span aria-hidden="true">↗</span></button>
+              <input id="robot-sim2real-seek" data-seek="robot-sim2real-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Sim-to-real video timeline">
+            </div>
+            <div class="video-group robot-stage" id="robot-sim2real-stage" role="group" aria-label="Sim-to-real transfer"></div>
+            <div id="robot-sim2real-thumbnails" class="sample-strip" role="group" aria-label="All sim-to-real environments"></div>
+          </article>
+
+          <article class="robot-panel" id="robot-environment-panel" aria-labelledby="robot-environment-title">
+            <header class="robot-description">
+              <div class="robot-title"><span class="robot-index" aria-hidden="true">02</span><h3 id="robot-environment-title">Environment augmentation</h3><span id="robot-environment-dataset" class="dataset-tag">DROID</span></div>
+              <p id="robot-environment-description"></p>
+            </header>
+            <div class="robot-controls">
+              <div class="case-picker">
+                <button type="button" class="icon-button" data-step-for="robot-environment-sample" data-step="-1" aria-label="Previous environment augmentation example">←</button>
+                <label class="select-field"><span id="robot-environment-select-label" class="sr-only">Example</span><select id="robot-environment-sample" aria-label="Environment augmentation example"></select></label>
+                <button type="button" class="icon-button" data-step-for="robot-environment-sample" data-step="1" aria-label="Next environment augmentation example">→</button>
+                <span id="robot-environment-counter" class="case-counter" aria-live="polite"></span>
+              </div>
+              <button type="button" id="robot-environment-source" class="button source-video-button" hidden>Source video <span aria-hidden="true">↗</span></button>
+              <input id="robot-environment-seek" data-seek="robot-environment-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Environment augmentation video timeline">
+            </div>
+            <div class="video-group robot-stage" id="robot-environment-stage" role="group" aria-label="Environment augmentation"></div>
+            <div id="robot-environment-thumbnails" class="sample-strip" role="group" aria-label="All environment augmentation demonstrations"></div>
+          </article>
+
+          <article class="robot-panel" id="robot-world-panel" aria-labelledby="robot-world-title">
+            <header class="robot-description">
+              <div class="robot-title"><span class="robot-index" aria-hidden="true">03</span><h3 id="robot-world-title">Visual world modeling</h3><span id="robot-world-dataset" class="dataset-tag">RoboCasa / DROID</span></div>
+              <p id="robot-world-description"></p>
+            </header>
+            <div class="robot-controls">
+              <div class="case-picker">
+                <button type="button" class="icon-button" data-step-for="robot-world-sample" data-step="-1" aria-label="Previous visual world modeling example">←</button>
+                <label class="select-field"><span id="robot-world-select-label" class="sr-only">Example</span><select id="robot-world-sample" aria-label="Visual world modeling example"></select></label>
+                <button type="button" class="icon-button" data-step-for="robot-world-sample" data-step="1" aria-label="Next visual world modeling example">→</button>
+                <span id="robot-world-counter" class="case-counter" aria-live="polite"></span>
+              </div>
+              <button type="button" id="robot-world-source" class="button source-video-button" hidden>Source video <span aria-hidden="true">↗</span></button>
+              <input id="robot-world-seek" data-seek="robot-world-stage" type="range" min="0" max="1000" value="0" hidden aria-label="Visual world modeling video timeline">
+            </div>
+            <div class="video-group robot-stage" id="robot-world-stage" role="group" aria-label="Visual world modeling"></div>
+            <div id="robot-world-thumbnails" class="sample-strip" role="group" aria-label="All visual world modeling examples"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-width section-space citation-section" id="citation" aria-labelledby="citation-title">
+      <div class="citation-heading"><h2 id="citation-title">Citation</h2><a class="inline-link" href="assets/freechroma.bib" download>Download BibTeX <span aria-hidden="true">↓</span></a></div>
+      <div class="citation-block">
+        <details class="citation-details" id="citation-details" open>
+          <summary class="citation-bar"><span class="citation-toggle-label">BibTeX <span class="citation-disclosure-icon" aria-hidden="true">+</span></span><button type="button" class="text-button" id="copy-citation">Copy citation</button></summary>
+          <pre><code id="bibtex">@misc{wu2026freechromagenerativechromakeying,
+      title={FreeCHROMA: Generative Chroma Keying from Unaligned Background References},
+      author={Jiayi Wu and Tianfu Wang and Rui Zhao and Florian Schiffers and Zhimin Chen and Cornelia Fermuller and Yezhou Yang and Christopher Metzler and Yiannis Aloimonos},
+      year={2026},
+      eprint={2610.14445},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2610.14445},
+}</code></pre>
+        </details>
+        <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+    <noscript><div class="noscript-note">Enable JavaScript for the interactive video galleries. You can still read the project overview, method, and citation above.</div></noscript>
+  </main>
+
+  <footer class="site-footer section-width">
+    <a class="brand" href="#top">Free<span class="brand-accent">CHROMA</span></a>
+    <a href="#top" class="inline-link">Back to top <span aria-hidden="true">↑</span></a>
+  </footer>
+
+  <dialog id="media-modal" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <button class="icon-button" id="close-modal" type="button" aria-label="Close expanded media">×</button>
+    </div>
+    <div class="modal-media">
+      <div id="modal-content"></div>
+      <button class="video-start" id="modal-play" type="button" aria-label="Play expanded video" hidden><span class="sr-only">Play</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z" fill="currentColor"/></svg></button>
+    </div>
+  </dialog>
+</body>
+</html>

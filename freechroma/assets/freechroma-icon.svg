@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 96" fill="none">
+  <defs>
+    <clipPath id="stage">
+      <path d="M7 81c6-10 8-20 8-34V25c3-8 7-12 15-12h48c8 0 13 4 16 12v22c0 14 2 24 8 34H7Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#stage)">
+    <path fill="#DFEEE4" d="M4 10h102v75H4z"/>
+    <path fill="#C9DFD0" d="M15 12h9v34c0 17-4 29-17 35l8-69Zm70 0h9l8 69C89 75 85 63 85 46V12Z"/>
+    <path fill="#D2E5D7" d="M24 46c19 8 42 8 61 0 0 17 4 29 17 35H7c13-6 17-18 17-35Z"/>
+  </g>
+  <path d="M7 81c6-10 8-20 8-34V25c3-8 7-12 15-12h48c8 0 13 4 16 12v22c0 14 2 24 8 34H7Z" stroke="#7F9A8D" stroke-width="2.8" stroke-linejoin="round"/>
+  <g stroke="#5C7B91" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="41" cy="31" r="4.2" fill="#5C7B91" stroke="none"/>
+    <path d="M41 40v14m-8-10 8-4 8 4M41 54l-7 12m7-12 7 12" stroke-width="3.5"/>
+    <path d="m62 49 11-4 11 4v14l-11 4-11-4V49Z" fill="#F8FCFA" stroke-width="2.5"/>
+    <path d="m62 49 11 4 11-4M73 53v14" stroke-width="2.5"/>
+    <g transform="rotate(-11 108 35)" stroke-width="2.8">
+      <path d="m103 30-9-5v18l9-5" fill="#EEF4F8"/>
+      <path d="M108 25v-5h10v5" />
+      <rect x="102" y="25" width="23" height="16" rx="3" fill="#EEF4F8"/>
+    </g>
+  </g>
+</svg>
