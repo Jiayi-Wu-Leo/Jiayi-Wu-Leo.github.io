@@ -111,6 +111,78 @@ if (initialLegacyTarget) document.getElementById(initialLegacyTarget)?.scrollInt
 syncSectionNavigation();
 
 
+// Load and play research previews only while they are visible.
+const previewMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+document.querySelectorAll("[data-project-preview]").forEach(function (preview) {
+  const video = preview.querySelector("[data-preview-video]");
+  const toggle = preview.querySelector("[data-preview-toggle]");
+  if (!video || !toggle) return;
+
+  let visible = false;
+  let userPaused = false;
+  let manualPlayback = false;
+  let failed = false;
+  video.muted = true;
+  toggle.hidden = false;
+
+  const updatePreviewButton = function () {
+    const playing = !video.paused && !video.ended;
+    const action = playing ? "Pause" : "Play";
+    toggle.setAttribute("aria-label", `${action} FreeCHROMA video preview`);
+    toggle.title = `${action} video preview`;
+    toggle.querySelector("ion-icon")?.setAttribute("name", playing ? "pause" : "play");
+  };
+
+  const updatePreviewPlayback = function () {
+    const shouldPlay = visible && !document.hidden && !userPaused && !failed
+      && (!previewMotionPreference.matches || manualPlayback);
+    if (!shouldPlay) {
+      video.pause();
+      return;
+    }
+
+    const source = video.querySelector("source[data-src]");
+    if (source) {
+      source.src = source.dataset.src;
+      source.removeAttribute("data-src");
+      video.load();
+    }
+    video.play().catch(updatePreviewButton);
+  };
+
+  toggle.addEventListener("click", function () {
+    userPaused = !video.paused;
+    if (!userPaused) manualPlayback = true;
+    updatePreviewPlayback();
+  });
+  video.addEventListener("play", updatePreviewButton);
+  video.addEventListener("pause", updatePreviewButton);
+  const handlePreviewError = function () {
+    failed = true;
+    video.pause();
+    toggle.hidden = true;
+  };
+  video.addEventListener("error", handlePreviewError);
+  video.querySelector("source")?.addEventListener("error", handlePreviewError);
+  document.addEventListener("visibilitychange", updatePreviewPlayback);
+  previewMotionPreference.addEventListener("change", function () {
+    manualPlayback = false;
+    updatePreviewPlayback();
+  });
+
+  if (typeof IntersectionObserver !== "undefined") {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.15;
+      updatePreviewPlayback();
+    }, { threshold: 0.15 }).observe(video);
+  } else {
+    visible = true;
+    updatePreviewPlayback();
+  }
+});
+
+
 // summary + Details toggle for experience descriptions only
 const initEntryDetails = function () {
   const experienceSection = [...document.querySelectorAll("section.timeline")].find(function (section) {

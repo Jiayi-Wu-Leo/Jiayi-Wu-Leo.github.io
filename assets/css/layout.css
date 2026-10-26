@@ -219,6 +219,33 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 .homepage .project-card:hover, .homepage .project-card:focus-within { transform: none; box-shadow: none; }
 .homepage .project-img { border: 0; border-radius: 10px; background: none; }
 .homepage .project-img img { max-height: 158px; width: 100%; object-fit: contain; }
+.homepage .project-video-preview::before { display: none; }
+.project-preview-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: inherit;
+  object-fit: contain;
+  background: hsl(220, 24%, 8%);
+}
+.project-preview-toggle {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: white;
+  background: hsla(220, 24%, 8%, 0.76);
+  border: 1px solid hsla(0, 0%, 100%, 0.45);
+  border-radius: 8px;
+  z-index: 2;
+}
+.project-preview-toggle[hidden] { display: none; }
+.project-preview-toggle:hover { background: hsl(220, 24%, 8%); }
+.project-preview-toggle ion-icon { font-size: 14px; }
 .homepage .project-content { min-width: 0; }
 .homepage .project-title { font-size: 17px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.4; margin-bottom: 5px; }
 .homepage .project-category { color: var(--orange-yellow-crayola); font-size: 12px; font-weight: 500; margin-bottom: 6px; }
