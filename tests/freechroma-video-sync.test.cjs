@@ -102,6 +102,7 @@ test('a shorter ended clip stays ended while the other clips finish', () => {
   const master = media(4.7), follower = media(4.4);
   follower.ended = true;
   follower.paused = true;
+  follower.readyState = 2;
   const g = group([master, follower]);
   g.sync();
   assert.equal(follower.seeks, 0);

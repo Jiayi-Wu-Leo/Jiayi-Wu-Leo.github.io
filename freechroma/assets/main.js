@@ -356,6 +356,8 @@
     }
 
     bufferedForPlayback(video) {
+      // An ended result has no future frame to decode; let longer peers finish.
+      if (this.onAdvance && video.ended) return true;
       // A downloaded Blob is not necessarily decoded. HAVE_CURRENT_DATA (2)
       // only guarantees one frame; wait for future frames after a decoder stall.
       if (video._fullyFetched) return video.readyState >= 3 && !video.seeking;
