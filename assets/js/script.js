@@ -116,69 +116,161 @@ const previewMotionPreference = window.matchMedia("(prefers-reduced-motion: redu
 
 document.querySelectorAll("[data-project-preview]").forEach(function (preview) {
   const video = preview.querySelector("[data-preview-video]");
-  const toggle = preview.querySelector("[data-preview-toggle]");
-  if (!video || !toggle) return;
+  const fallback = preview.querySelector("[data-preview-fallback]");
+  if (!video || !fallback) return;
 
   let visible = false;
-  let userPaused = false;
-  let manualPlayback = false;
-  let failed = false;
+  let pageHidden = false;
+  let useFallback = false;
+  let pendingPlay = false;
+  let reloads = 0;
+  let playbackVersion = 0;
+  let watchdog;
+  let retry;
+  let lastTime = 0;
+  let lastProgress = 0;
   video.muted = true;
-  toggle.hidden = false;
+  video.defaultMuted = true;
+  video.playsInline = true;
 
-  const updatePreviewButton = function () {
-    const playing = !video.paused && !video.ended;
-    const action = playing ? "Pause" : "Play";
-    toggle.setAttribute("aria-label", `${action} FreeCHROMA video preview`);
-    toggle.title = `${action} video preview`;
-    toggle.querySelector("ion-icon")?.setAttribute("name", playing ? "pause" : "play");
+  const shouldAnimate = function () {
+    return visible && !pageHidden && !document.hidden && !previewMotionPreference.matches;
+  };
+
+  const stopWatchdog = function () {
+    window.clearInterval(watchdog);
+    watchdog = undefined;
+  };
+
+  const updateFallback = function () {
+    const active = useFallback && shouldAnimate();
+    if (active) {
+      // Keep the poster visible while the animated image loads.
+      if (!fallback.hasAttribute("src")) fallback.src = fallback.dataset.src;
+      const ready = fallback.complete && fallback.naturalWidth > 0;
+      fallback.hidden = !ready;
+      video.hidden = ready;
+    } else {
+      fallback.hidden = true;
+      fallback.removeAttribute("src");
+      video.hidden = false;
+    }
+  };
+
+  const activateFallback = function () {
+    useFallback = true;
+    playbackVersion += 1;
+    pendingPlay = false;
+    window.clearTimeout(retry);
+    stopWatchdog();
+    video.pause();
+    updateFallback();
+  };
+
+  const recoverPreview = function () {
+    if (!shouldAnimate() || useFallback || retry) return;
+    playbackVersion += 1;
+    pendingPlay = false;
+    stopWatchdog();
+    // Retry loading once; never leave an endless reload loop on a poor connection.
+    if (reloads >= 1) {
+      activateFallback();
+      return;
+    }
+    reloads += 1;
+    retry = window.setTimeout(function () {
+      retry = undefined;
+      if (!shouldAnimate()) return;
+      video.load();
+      updatePreviewPlayback();
+    }, 400);
+  };
+
+  const startWatchdog = function () {
+    if (watchdog) return;
+    lastTime = video.currentTime;
+    lastProgress = performance.now();
+    watchdog = window.setInterval(function () {
+      if (!shouldAnimate() || useFallback) return;
+      if (Math.abs(video.currentTime - lastTime) > 0.01) {
+        lastTime = video.currentTime;
+        lastProgress = performance.now();
+      } else if (performance.now() - lastProgress >= 6000) {
+        recoverPreview();
+      }
+    }, 1000);
   };
 
   const updatePreviewPlayback = function () {
-    const shouldPlay = visible && !document.hidden && !userPaused && !failed
-      && (!previewMotionPreference.matches || manualPlayback);
-    if (!shouldPlay) {
+    updateFallback();
+    if (!shouldAnimate() || useFallback) {
+      playbackVersion += 1;
+      pendingPlay = false;
+      window.clearTimeout(retry);
+      retry = undefined;
+      stopWatchdog();
       video.pause();
       return;
     }
 
-    const source = video.querySelector("source[data-src]");
-    if (source) {
-      source.src = source.dataset.src;
-      source.removeAttribute("data-src");
+    if (!video.hasAttribute("src")) {
+      // Assign the media element directly, rather than replacing a nested source.
+      video.src = video.dataset.src;
       video.load();
     }
-    video.play().catch(updatePreviewButton);
+    startWatchdog();
+    if (pendingPlay || !video.paused || retry) return;
+    pendingPlay = true;
+    const version = ++playbackVersion;
+    video.play().then(function () {
+      if (version === playbackVersion) pendingPlay = false;
+    }).catch(function (error) {
+      if (version !== playbackVersion) return;
+      pendingPlay = false;
+      if (!shouldAnimate()) return;
+      // A rejected autoplay request cannot be fixed with repeated play() calls.
+      if (error.name === "NotAllowedError" || error.name === "NotSupportedError") {
+        activateFallback();
+      } else {
+        recoverPreview();
+      }
+    });
   };
 
-  toggle.addEventListener("click", function () {
-    userPaused = !video.paused;
-    if (!userPaused) manualPlayback = true;
-    updatePreviewPlayback();
+  fallback.addEventListener("load", updateFallback);
+  fallback.addEventListener("error", function () {
+    fallback.hidden = true;
+    video.hidden = false;
   });
-  video.addEventListener("play", updatePreviewButton);
-  video.addEventListener("pause", updatePreviewButton);
-  const handlePreviewError = function () {
-    failed = true;
-    video.pause();
-    toggle.hidden = true;
-  };
-  video.addEventListener("error", handlePreviewError);
-  video.querySelector("source")?.addEventListener("error", handlePreviewError);
+  video.addEventListener("error", recoverPreview);
   document.addEventListener("visibilitychange", updatePreviewPlayback);
-  previewMotionPreference.addEventListener("change", function () {
-    manualPlayback = false;
+  window.addEventListener("pagehide", function () {
+    pageHidden = true;
     updatePreviewPlayback();
   });
+
+  const measureVisibility = function () {
+    const rect = preview.getBoundingClientRect();
+    const width = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0));
+    const height = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+    visible = rect.width > 0 && rect.height > 0 && width * height / (rect.width * rect.height) >= 0.15;
+    updatePreviewPlayback();
+  };
+  window.addEventListener("pageshow", function () {
+    pageHidden = false;
+    measureVisibility();
+  });
+  previewMotionPreference.addEventListener("change", updatePreviewPlayback);
 
   if (typeof IntersectionObserver !== "undefined") {
     new IntersectionObserver(function (entries) {
       visible = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.15;
       updatePreviewPlayback();
-    }, { threshold: 0.15 }).observe(video);
+    }, { threshold: [0, 0.15] }).observe(preview);
   } else {
-    visible = true;
-    updatePreviewPlayback();
+    window.addEventListener("scroll", measureVisibility, { passive: true });
+    window.addEventListener("resize", measureVisibility);
+    measureVisibility();
   }
 });
 

@@ -1,5 +1,5 @@
 // Rebuild the homepage's input/reference/result preview from the original example.
-// Usage: node scripts/render-freechroma-preview.cjs /path/to/ffmpeg
+// Usage: node scripts/render-freechroma-preview.cjs /path/to/ffmpeg [/path/to/sharp]
 const { spawnSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -9,6 +9,7 @@ const ffmpeg = process.argv[2] || process.env.FREECHROMA_FFMPEG || 'ffmpeg';
 const source = path.join(root, 'freechroma/media/bgedit_5922495-hd_2048_1080_25fps');
 const video = path.join(root, 'assets/videos/freechroma-compositing.mp4');
 const poster = path.join(root, 'assets/images/freechroma-compositing-poster.jpg');
+const fallback = path.join(root, 'assets/images/freechroma-compositing.webp');
 const font = '/System/Library/Fonts/Helvetica.ttc';
 fs.mkdirSync(path.dirname(video), { recursive: true });
 
@@ -69,4 +70,6 @@ run([
   '-movflags', '+faststart', video,
 ]);
 run(['-ss', '1', '-i', video, '-frames:v', '1', '-q:v', '2', poster]);
-console.log(JSON.stringify({ video, poster, bytes: fs.statSync(video).size }, null, 2));
+require('./render-freechroma-fallback.cjs')({ ffmpeg, video, fallback, sharpPath: process.argv[3] })
+  .then(() => console.log(JSON.stringify({ video, poster, fallback, bytes: fs.statSync(video).size }, null, 2)))
+  .catch(error => { console.error(error); process.exitCode = 1; });

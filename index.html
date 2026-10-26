@@ -104,7 +104,7 @@
     document.documentElement.dataset.theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : (prefersLight ? "light" : "dark");
   </script>
   <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/layout.css?v=20261026-freechroma-video">
+  <link rel="stylesheet" href="./assets/css/layout.css?v=20261026-preview-recovery">
 
   <!--
     - google font link
@@ -213,13 +213,9 @@
               <div class="project-card">
                 <figure class="project-img project-video-preview" data-project-preview>
                   <a href="https://jiayi-wu-leo.github.io/freechroma/" aria-label="View the FreeCHROMA project: foreground video and background references combined into a harmonized result">
-                    <video class="project-preview-video" data-preview-video width="1280" height="720" poster="./assets/images/freechroma-compositing-poster.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true">
-                      <source data-src="./assets/videos/freechroma-compositing.mp4" type="video/mp4">
-                    </video>
+                    <video class="project-preview-video" data-preview-video data-src="./assets/videos/freechroma-compositing.mp4" width="1280" height="720" poster="./assets/images/freechroma-compositing-poster.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+                    <img class="project-preview-fallback" data-preview-fallback data-src="./assets/images/freechroma-compositing.webp" width="640" height="360" alt="" hidden>
                   </a>
-                  <button class="project-preview-toggle" type="button" data-preview-toggle aria-label="Play FreeCHROMA video preview" title="Play video preview" hidden>
-                    <ion-icon name="play" aria-hidden="true"></ion-icon>
-                  </button>
                 </figure>
 
                 <div class="project-content">
@@ -857,7 +853,7 @@
   <!--
     - custom js link
   -->
-  <script src="./assets/js/script.js?v=20261026-freechroma-video"></script>
+  <script src="./assets/js/script.js?v=20261026-preview-recovery"></script>
 
   <!--
     - ionicon link
