@@ -25,6 +25,10 @@
   }
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const compactLayout = window.matchMedia("(max-width: 640px), (max-width: 980px) and (pointer: coarse)");
+  // Landscape tablets can be wider than the mobile layout while still sharing
+  // a limited video decoder budget. Include touch when a trackpad is attached.
+  const tabletGallery = window.matchMedia("(min-width: 641px) and (max-width: 1440px) and (any-pointer: coarse)");
+  const focusedGallery = () => compactLayout.matches || tabletGallery.matches;
   const saveData = Boolean(navigator.connection?.saveData);
   let allStopped = reducedMotion.matches || saveData;
   let modalOpen = false;
@@ -201,7 +205,7 @@
           video.classList.add("is-ready");
           this.sync();
         };
-        video.onprogress = video.oncanplaythrough = video.onseeked = () => this.sync();
+        video.onprogress = video.oncanplay = video.oncanplaythrough = video.onseeked = () => this.sync();
         video.onwaiting = () => this.sync();
         video.onended = () => {
           if (this.active && this.playing && (this.onAdvance || video === this.master())) this.finishCycle();
@@ -280,7 +284,7 @@
       this.videos.forEach(video => {
         video.onloadedmetadata = null;
         video.onloadeddata = null;
-        video.onprogress = video.oncanplaythrough = video.onseeked = null;
+        video.onprogress = video.oncanplay = video.oncanplaythrough = video.onseeked = null;
         video.onwaiting = video.onended = null;
         video.onerror = null;
         if (video.hasAttribute("src")) {
@@ -352,7 +356,9 @@
     }
 
     bufferedForPlayback(video) {
-      if (video._fullyFetched) return video.readyState >= 2 && !video.seeking;
+      // A downloaded Blob is not necessarily decoded. HAVE_CURRENT_DATA (2)
+      // only guarantees one frame; wait for future frames after a decoder stall.
+      if (video._fullyFetched) return video.readyState >= 3 && !video.seeking;
       if (video.readyState < 3 || video.seeking || !Number.isFinite(video.duration)) return false;
       // For direct file previews, honor a browser that has finished preloading.
       if (video.readyState === 4 && video.networkState === 1) return true;
@@ -396,6 +402,7 @@
         return;
       }
       if (!this.active || !this.playing || this.holdPlayback || document.hidden || modalOpen) {
+        if (this.running) this.alignPending = true;
         this.freeze();
         if (this.active && this.alignPending) this.align();
         this.setLoading(false);
@@ -410,6 +417,15 @@
       if (!this.alignPending && (this.onAdvance ? videos.every(video => video.ended) : this.master().ended)) {
         this.finishCycle();
         return;
+      }
+      const master = this.master();
+      if (this.running && !master.ended && !videos.some(video => video._playPending) &&
+          videos.some(video => !video.ended && (video.paused ||
+            Math.abs(video.currentTime - master.currentTime) > 0.2))) {
+        // Rate nudges cannot recover a large decoder delay promptly. Pause the
+        // entire group, align it once, then wait for every seek/decode to finish.
+        this.freeze();
+        this.alignPending = true;
       }
       if (this.alignPending) this.align();
       if (this.alignPending || !videos.every(video => this.bufferedForPlayback(video))) {
@@ -1172,11 +1188,12 @@
     const alternatives = selected.filter(asset => basename(asset) !== "ours");
     cacheGallerySample("comparison", sample);
     comparisonOverlay?.destroy();
+    $("#comparison-stage").classList.toggle("is-tablet-gallery", tabletGallery.matches && !compactLayout.matches);
     renderGroup("comparison-stage", inputs(sample) + `<div class="comparison-videos">
       ${methodPicker("comparison", alternatives)}
       ${selected.map(asset => figure(asset, basename(asset) === "ours" ? "FreeCHROMA" : asset.label, {
         ours: basename(asset) === "ours", badge: false, foreground: sample.figures[0],
-        inactive: compactLayout.matches && basename(asset) !== "ours" && asset !== alternatives[mobileMethods.comparison]
+        inactive: focusedGallery() && basename(asset) !== "ours" && asset !== alternatives[mobileMethods.comparison]
       })).join("")}
     </div>`, "comparison-sample", options);
     comparisonOverlay = bindForegroundOverlay($("#comparison-stage"));
@@ -1209,10 +1226,11 @@
     const selected = resultVideos(sample);
     const alternatives = selected.filter(asset => basename(asset) !== "ours");
     cacheGallerySample("ablation", sample);
+    $("#ablation-stage").classList.toggle("is-tablet-gallery", tabletGallery.matches && !compactLayout.matches);
     renderGroup("ablation-stage", inputs(sample) + `<div class="ablation-videos">${methodPicker("ablation", alternatives)}${selected.map(asset =>
       figure(asset, basename(asset) === "ours" ? "FreeCHROMA · full model" : asset.label, {
         ours: basename(asset) === "ours", badge: false, description: ablationDescriptions.get(basename(asset)),
-        inactive: compactLayout.matches && basename(asset) !== "ours" && asset !== alternatives[mobileMethods.ablation]
+        inactive: focusedGallery() && basename(asset) !== "ours" && asset !== alternatives[mobileMethods.ablation]
       })
     ).join("")}</div>`, "ablation-sample", options);
     updateCaseCounter("ablation-sample", "ablation-counter");
@@ -1221,7 +1239,7 @@
   $("#ablation-sample").addEventListener("change", renderAblation);
 
   function chooseMobileMethod(key, index, focusSelector) {
-    if (!compactLayout.matches || mobileMethods[key] === index) return;
+    if (!focusedGallery() || mobileMethods[key] === index) return;
     mobileMethods[key] = index;
     (key === "comparison" ? renderComparison : renderAblation)();
     if (focusSelector) $(focusSelector)?.focus({ preventScroll: true });
@@ -1238,10 +1256,12 @@
     const next = (mobileMethods[key] + Number(button.dataset.direction) + count) % count;
     chooseMobileMethod(key, next, `[data-method-step="${key}"][data-direction="${button.dataset.direction}"]`);
   });
-  compactLayout.addEventListener("change", () => {
+  const updateGalleryMode = () => {
     renderComparison({ preserveTime: true });
     renderAblation({ preserveTime: true });
-  });
+  };
+  compactLayout.addEventListener("change", updateGalleryMode);
+  tabletGallery.addEventListener("change", updateGalleryMode);
 
   const robotDemo = data.robots.find(sample => sample.id === "rdemo0");
   const worldDemo = data.robots.find(sample => sample.id === "rdemo1");

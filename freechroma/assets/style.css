@@ -297,6 +297,16 @@ sup { font-size: 12px; position: relative; top: -.15em; margin-left: 2px; }
 .input-plus { align-self: center; color: var(--muted); font-size: 19px; margin: 0 3px calc(var(--text-caption) * 1.5 + 8px); }
 .comparison-videos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 19px 14px; }
 .mobile-method-picker { display: none; }
+/* Keep landscape tablets to three decoders: foreground, one method, and ours.
+   The rest of the page retains its tablet/desktop layout. */
+.is-tablet-gallery :is(.comparison-videos, .ablation-videos) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.is-tablet-gallery .mobile-method-picker { display: grid; grid-column: 1; grid-row: 1; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; }
+.is-tablet-gallery .mobile-method-picker .icon-button { width: 44px; height: 44px; }
+.is-tablet-gallery .mobile-method-choice { min-width: 0; }
+.is-tablet-gallery .mobile-method-choice > span { display: none; }
+.is-tablet-gallery .mobile-method-choice > select { width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: var(--surface); font: inherit; }
+.is-tablet-gallery :is(.comparison-videos, .ablation-videos) > .media-figure { grid-column: 1; grid-row: 2; }
+.is-tablet-gallery :is(.comparison-videos, .ablation-videos) > .result-ours { grid-column: 2; }
 .comparison-videos .media-caption { font-size: var(--text-caption); }
 .comparison-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 20px; }
 .comparison-footer p { font-size: var(--text-label); color: var(--muted); }
