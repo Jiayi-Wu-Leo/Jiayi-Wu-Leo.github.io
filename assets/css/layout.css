@@ -347,14 +347,15 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 }
 .visitor-map-widget > #mapmyvisitors-widget { grid-area: 1 / 1; width: 100% !important; min-width: 0; min-height: 0; }
 .visitor-map-widget .mapmyvisitors-map { width: 100% !important; height: auto !important; aspect-ratio: 2.04 / 1; background-size: 100% 100%; }
-/* White disappears with multiply; inverted black disappears with screen.
-   Blend at the outer wrapper so nested stacking contexts cannot trap the effect.
-   Theme changes never reload the embed or record another visit. */
-.visitor-map-widget[data-map-state="ready"] { mix-blend-mode: multiply; opacity: 0.72; }
-[data-theme="dark"] .visitor-map-widget[data-map-state="ready"] { mix-blend-mode: screen; opacity: 0.65; }
-[data-theme="dark"] .visitor-map-widget > #mapmyvisitors-widget { filter: invert(1) hue-rotate(180deg) saturate(0.65); }
-.visitor-map-widget .jvectormap-zoomin, .visitor-map-widget .jvectormap-zoomout { border: 0; opacity: 0.65; }
-.visitor-map-widget .jvectormap-zoomin:hover, .visitor-map-widget .jvectormap-zoomout:hover { opacity: 1; }
+/* True alpha works independently of the browser's backdrop/compositing layers. */
+.visitor-map-widget[data-map-surface="transparent"] .mapmyvisitors-map-container { background: transparent !important; }
+.visitor-map-widget[data-map-surface="transparent"] .mapmyvisitors-map { background-image: none !important; background-color: transparent !important; }
+.visitor-map-basemap { position: absolute; inset: 0; display: block; pointer-events: none; opacity: 0.55; }
+.visitor-map-land-color { flood-color: #71869b; }
+[data-theme="dark"] .visitor-map-land-color { flood-color: #a1b1c7; }
+.visitor-map-widget .jvectormap-zoomin, .visitor-map-widget .jvectormap-zoomout { display: none !important; }
+/* This is an overview/link, not a zoomable map; keep touch scrolling natural. */
+.visitor-map-widget .jvectormap-container { pointer-events: none; }
 .visitor-map-widget:not([data-map-state="ready"]) > #mapmyvisitors-widget { visibility: hidden; }
 .visitor-map-placeholder { grid-area: 1 / 1; z-index: 1; display: grid; justify-items: center; gap: 10px; padding: 24px; color: var(--light-gray-70); font-size: 12px; text-align: center; }
 .visitor-map-placeholder svg { color: var(--orange-yellow-crayola); opacity: 0.6; }
