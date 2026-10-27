@@ -332,6 +332,35 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 .homepage .resume .academic-services-card { padding: 18px; border-radius: 12px; background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: none; }
 .homepage .resume .academic-services-card::before { display: none; }
 .homepage .resume .archive-disclosure .timeline { margin-top: 20px; }
+.visitor-map-section { padding: 24px 0 28px; }
+.visitor-map-header { margin-bottom: 12px; text-align: center; }
+.visitor-map-header h2 { color: var(--light-gray-70); font-size: 14px; font-weight: 400; letter-spacing: 0.025em; line-height: 1.5; }
+.visitor-map-widget {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 2.04 / 1;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.visitor-map-widget > #mapmyvisitors-widget { grid-area: 1 / 1; width: 100% !important; min-width: 0; min-height: 0; }
+.visitor-map-widget .mapmyvisitors-map { width: 100% !important; height: auto !important; aspect-ratio: 2.04 / 1; background-size: 100% 100%; }
+/* White disappears with multiply; inverted black disappears with screen.
+   Blend at the outer wrapper so nested stacking contexts cannot trap the effect.
+   Theme changes never reload the embed or record another visit. */
+.visitor-map-widget[data-map-state="ready"] { mix-blend-mode: multiply; opacity: 0.72; }
+[data-theme="dark"] .visitor-map-widget[data-map-state="ready"] { mix-blend-mode: screen; opacity: 0.65; }
+[data-theme="dark"] .visitor-map-widget > #mapmyvisitors-widget { filter: invert(1) hue-rotate(180deg) saturate(0.65); }
+.visitor-map-widget .jvectormap-zoomin, .visitor-map-widget .jvectormap-zoomout { border: 0; opacity: 0.65; }
+.visitor-map-widget .jvectormap-zoomin:hover, .visitor-map-widget .jvectormap-zoomout:hover { opacity: 1; }
+.visitor-map-widget:not([data-map-state="ready"]) > #mapmyvisitors-widget { visibility: hidden; }
+.visitor-map-placeholder { grid-area: 1 / 1; z-index: 1; display: grid; justify-items: center; gap: 10px; padding: 24px; color: var(--light-gray-70); font-size: 12px; text-align: center; }
+.visitor-map-placeholder svg { color: var(--orange-yellow-crayola); opacity: 0.6; }
+.visitor-map-placeholder[hidden] { display: none; }
+.visitor-map-attribution { margin-top: 8px; color: var(--light-gray-70); font-size: 10px; text-align: center; }
+.homepage .visitor-map-attribution a { display: inline; color: var(--light-gray-70); }
 .site-footer { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 30px 0 40px; border-top: 1px solid var(--glass-border); }
 .site-footer p { color: var(--white-2); font-size: 19px; font-weight: 500; margin-bottom: 4px; }
 .site-footer a { font-size: 13px; min-height: 32px; display: inline-flex; align-items: center; }
@@ -381,6 +410,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
   .homepage .news .timeline-text { grid-column: 1; grid-row: 3; font-size: 12px; }
   .homepage .resume .education-item { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
   .homepage .resume .education-logo { width: 34px; height: 34px; flex-basis: 34px; }
+  .visitor-map-section { padding: 20px 0 24px; }
+  .visitor-map-header { margin-bottom: 10px; }
+  .visitor-map-header h2 { font-size: 13px; }
+  .visitor-map-placeholder { gap: 6px; padding: 16px; font-size: 11px; }
+  .visitor-map-placeholder svg { width: 36px; height: 36px; }
   .site-footer { padding-bottom: 24px; align-items: start; }
   .site-footer ul { gap: 12px; }
 }

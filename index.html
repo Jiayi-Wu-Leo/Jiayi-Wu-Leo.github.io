@@ -104,7 +104,7 @@
     document.documentElement.dataset.theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : (prefersLight ? "light" : "dark");
   </script>
   <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/layout.css?v=20261026-preview-recovery">
+  <link rel="stylesheet" href="./assets/css/layout.css?v=20261027-visitor-map-blend">
 
   <!--
     - google font link
@@ -844,6 +844,25 @@
         </details>
       </article>
 
+      <section class="visitor-map-section" aria-labelledby="visitor-map-heading">
+        <div class="visitor-map-header">
+          <h2 id="visitor-map-heading">Visitors around the world</h2>
+        </div>
+        <div class="visitor-map-widget" id="visitor-map-widget" aria-label="World map of approximate visitor locations, based on IP addresses">
+          <div class="visitor-map-placeholder" data-visitor-map-placeholder role="status">
+            <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+              <circle cx="24" cy="24" r="18"></circle>
+              <ellipse cx="24" cy="24" rx="8" ry="18"></ellipse>
+              <path d="M6 24h36M9 14h30M9 34h30"></path>
+            </svg>
+            <p>Loading visitor map…</p>
+          </div>
+          <script async id="mapmyvisitors" src="https://mapmyvisitors.com/map.js?cl=a9b8c5&amp;w=a&amp;t=n&amp;d=Ib6uu7JGdwIdUautTu27nuyptKPws-aBlgvYLjCV-SU&amp;co=ffffff&amp;cmo=4d9589&amp;cmn=b9756b&amp;ct=687786"></script>
+        </div>
+        <p class="visitor-map-attribution"><a href="https://mapmyvisitors.com/" target="_blank" rel="noopener noreferrer">MapMyVisitors</a> · <a href="https://mapmyvisitors.com/b/policy" target="_blank" rel="noopener noreferrer">Privacy</a></p>
+        <noscript><p class="visitor-map-attribution">Enable JavaScript to view the visitor map.</p></noscript>
+      </section>
+
       <footer class="site-footer" id="contact">
         <div><p>Let's connect.</p><a href="mailto:jiayiwu@umd.edu">jiayiwu@umd.edu <span aria-hidden="true">↗</span></a></div>
         <ul aria-label="More profiles">
@@ -866,6 +885,7 @@
     - custom js link
   -->
   <script src="./assets/js/script.js?v=20261026-preview-recovery"></script>
+  <script src="./assets/js/visitor-map.js?v=20261027"></script>
 
   <!--
     - ionicon link
