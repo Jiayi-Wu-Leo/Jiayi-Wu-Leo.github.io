@@ -9,6 +9,12 @@
 
 html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 
+/* Apply a theme as one visual update, not separate per-element transitions. */
+html.theme-changing,
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after { transition: none !important; }
+
 .homepage {
   --ff-poppins: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-family: var(--ff-poppins);
@@ -366,6 +372,27 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 .site-footer p { color: var(--white-2); font-size: 19px; font-weight: 500; margin-bottom: 4px; }
 .site-footer a { font-size: 13px; min-height: 32px; display: inline-flex; align-items: center; }
 .site-footer ul { display: flex; gap: 18px; }
+
+/* Avoid fixed background-attachment + animated blur + backdrop layers on
+   touch browsers. A plain fixed gradient repaints without waiting for scroll. */
+@media (max-width: 680px), (hover: none) {
+  body.homepage { isolation: isolate; background: var(--smoky-black); background-attachment: scroll; transition: none; }
+  body.homepage::before {
+    inset: 0;
+    background: var(--page-gradient);
+    opacity: 1;
+    animation: none;
+    filter: none;
+    transform: none;
+    border-radius: 0;
+  }
+  .homepage .navbar {
+    background: var(--smoky-black);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    will-change: auto;
+  }
+}
 
 @media (max-width: 680px) {
   html { scroll-padding-top: 88px; }

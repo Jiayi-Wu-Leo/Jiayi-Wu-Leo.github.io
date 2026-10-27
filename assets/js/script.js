@@ -47,9 +47,27 @@ const updateThemeToggle = function () {
   if (themeToggleIcon) themeToggleIcon.setAttribute("name", themeIcons[themeMode]);
 };
 
+let themePaintFrame;
 const applyTheme = function () {
-  document.documentElement.dataset.theme = getResolvedTheme();
+  const root = document.documentElement;
+  const resolvedTheme = getResolvedTheme();
+  const changed = root.dataset.theme !== resolvedTheme;
+  if (changed) {
+    cancelAnimationFrame(themePaintFrame);
+    root.classList.add('theme-changing');
+  }
+  root.dataset.theme = resolvedTheme;
   updateThemeToggle();
+  if (changed) {
+    // Resolve the new palette while transitions are disabled, then retain it
+    // through one paint. Rapid toggles cancel the previous cleanup frame.
+    void root.offsetHeight;
+    themePaintFrame = requestAnimationFrame(() => {
+      themePaintFrame = requestAnimationFrame(() => {
+        root.classList.remove('theme-changing');
+      });
+    });
+  }
 };
 
 if (themeToggle) {
