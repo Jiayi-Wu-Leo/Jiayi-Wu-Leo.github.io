@@ -99,9 +99,8 @@
     - custom css link
   -->
   <script>
-    const savedTheme = localStorage.getItem("theme-mode") || localStorage.getItem("theme");
     const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    document.documentElement.dataset.theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : (prefersLight ? "light" : "dark");
+    document.documentElement.dataset.theme = prefersLight ? "light" : "dark";
   </script>
   <link rel="stylesheet" href="./assets/css/style.css?v=20261027-theme-paint">
   <link rel="stylesheet" href="./assets/css/layout.css?v=20261027-theme-paint">
@@ -884,7 +883,7 @@
   <!--
     - custom js link
   -->
-  <script src="./assets/js/script.js?v=20261027-theme-paint"></script>
+  <script src="./assets/js/script.js?v=20261027-system-theme"></script>
   <script src="./assets/js/visitor-map.js?v=20261027-alpha"></script>
 
   <!--

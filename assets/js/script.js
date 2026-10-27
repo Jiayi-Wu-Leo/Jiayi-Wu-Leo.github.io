@@ -13,19 +13,9 @@ const themeIcons = {
   dark: "moon-outline"
 };
 
-const getStoredThemeMode = function () {
-  const storedMode = localStorage.getItem("theme-mode");
-  if (themeModes.includes(storedMode)) return storedMode;
-  if (storedMode) localStorage.removeItem("theme-mode");
-
-  const legacyTheme = localStorage.getItem("theme");
-  if (["light", "dark"].includes(legacyTheme)) return legacyTheme;
-  if (legacyTheme) localStorage.removeItem("theme");
-
-  return "system";
-};
-
-let themeMode = getStoredThemeMode();
+// Every visit starts with the device theme. Manual choices are in-memory only;
+// old localStorage preferences must not override a later daytime/system theme.
+let themeMode = "system";
 
 const getResolvedTheme = function () {
   return themeMode === "system" ? (colorSchemeQuery.matches ? "light" : "dark") : themeMode;
@@ -73,18 +63,23 @@ const applyTheme = function () {
 if (themeToggle) {
   themeToggle.addEventListener("click", function () {
     themeMode = themeModes[(themeModes.indexOf(themeMode) + 1) % themeModes.length];
-    if (themeMode === "system") {
-      localStorage.removeItem("theme-mode");
-    } else {
-      localStorage.setItem("theme-mode", themeMode);
-    }
-    localStorage.removeItem("theme");
     applyTheme();
   });
 }
 
 colorSchemeQuery.addEventListener("change", function () {
   if (themeMode === "system") applyTheme();
+});
+
+// Mobile browsers may suspend media-query events while the page is hidden.
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "visible" && themeMode === "system") applyTheme();
+});
+
+window.addEventListener("pageshow", function (event) {
+  // A page restored from the back/forward cache is a new visit, too.
+  if (event.persisted) themeMode = "system";
+  applyTheme();
 });
 
 applyTheme();
