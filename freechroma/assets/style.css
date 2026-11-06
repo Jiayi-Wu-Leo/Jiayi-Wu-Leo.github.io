@@ -316,13 +316,13 @@ sup { font-size: 12px; position: relative; top: -.15em; margin-left: 2px; }
 .speed-select { border: 1px solid var(--line); border-radius: 10px; background: var(--surface-subtle); font-size: 16px; padding: 5px; color: var(--green); cursor: pointer; }
 .section-heading.method-heading { align-items: flex-start; flex-direction: column; gap: 16px; margin-bottom: 0; }
 .section-heading.method-heading > p { max-width: 850px; font-size: 18px; line-height: 1.65; }
-.method-figures { display: grid; gap: 28px; margin-top: 32px; }
+.method-figures { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 32px; }
 .method-figure { min-width: 0; background: var(--glass); padding: 19px 22px 22px; border: 1px solid var(--glass-edge); border-radius: 28px; box-shadow: var(--shadow); }
 .method-figure-bar { padding-bottom: 18px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
 .method-figure-bar h3 { font-size: 22px; line-height: 1.35; margin-bottom: 10px; }
 .method-figure-bar p { max-width: 920px; color: var(--muted); font-size: var(--text-body); line-height: 1.65; }
-.figure-zoom { display: block; background: #fff; width: 100%; padding: 15px 4px 20px; cursor: zoom-in; border-radius: 18px; }
-.figure-zoom img { width: 100%; height: auto; max-height: 560px; object-fit: contain; }
+.figure-zoom { display: block; appearance: none; -webkit-appearance: none; background: #fff; width: 100%; min-width: 0; max-width: 100%; padding: 15px 4px 20px; cursor: zoom-in; border-radius: 18px; overflow: hidden; }
+.figure-zoom img { display: block; width: 100%; min-width: 0; max-width: 100%; height: auto; max-height: 560px; object-fit: contain; }
 .ablation-videos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .ablation-videos .media-caption { font-size: var(--text-caption); }
 .ablation-notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; border-top: 1px solid var(--line); margin-top: 22px; padding-top: 19px; }
