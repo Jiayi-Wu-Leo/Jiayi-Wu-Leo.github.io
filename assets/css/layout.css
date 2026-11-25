@@ -254,6 +254,7 @@ html.theme-changing *::after { transition: none !important; }
   object-fit: contain;
   background: hsl(220, 24%, 8%);
 }
+.project-preview-video-fill { object-fit: cover; object-position: center; }
 .homepage .project-img .project-preview-fallback {
   max-height: none;
 }
