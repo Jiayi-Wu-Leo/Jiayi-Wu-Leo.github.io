@@ -124,6 +124,24 @@ html.theme-changing *::after { transition: none !important; }
 }
 .homepage .theme-toggle::before { display: none; }
 
+/* Touch browsers can retain :hover after a tap. Keep the mobile toggle flat
+   in every theme/state; keyboard :focus-visible still supplies its outline. */
+@media (max-width: 680px), (hover: none), (pointer: coarse) {
+  :root[data-theme] .homepage .navbar .theme-toggle {
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--orange-yellow-crayola);
+    transform: none;
+    animation: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :root[data-theme] .homepage .navbar .theme-toggle ion-icon { transform: none; }
+  :root[data-theme] .homepage .navbar .theme-toggle:active { transform: scale(0.94); }
+  :root[data-theme] .homepage .navbar .theme-toggle:focus:not(:focus-visible) { outline: none; }
+}
+
 .homepage .profile { padding-top: 36px; padding-bottom: 28px; }
 .profile-heading { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
 .profile-identity { min-width: 0; }
